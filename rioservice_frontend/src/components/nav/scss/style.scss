@@ -1,0 +1,19 @@
+@use '../../scss/reset';
+@import '../../scss/var';
+@import '../../scss/basicElements';
+
+nav#navigation{
+    background-color: $color_three;
+    padding: 4px;
+    
+    ul{
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+    }
+
+    button{
+        @extend %button;
+        margin: 4px;
+    }
+}

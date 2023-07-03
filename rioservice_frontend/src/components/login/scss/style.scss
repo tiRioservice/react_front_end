@@ -1,0 +1,22 @@
+@use '../../scss/reset';
+@import '../../scss/var';
+
+section#loginScreen{
+    div.loginScreen__container{
+        background-color: $color_three;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        @import './logo';
+        @import './loginForm';
+    
+        p#api_version, p#app_version{
+            text-align: center;
+            color: $color_two;
+            font-size: 12px;
+        }
+    }
+
+}

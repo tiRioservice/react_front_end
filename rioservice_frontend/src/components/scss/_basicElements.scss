@@ -1,0 +1,20 @@
+@import './var';
+
+%button{
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid $color_one;
+    transition: all 0.4s ease-in-out;
+}
+
+%basic-input{
+    width: 100%;
+    max-width: 320px;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid $color_one;
+    margin-bottom: 4px;
+    transition: all 0.4s ease-in-out;
+    text-align: center;
+}

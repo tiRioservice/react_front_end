@@ -1,0 +1,26 @@
+@use '../../scss/reset';
+@import '../../scss/var';
+@import '../../scss/basicElements';
+
+form#loginForm{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+
+    input{
+        @extend %basic-input;
+    }
+
+    button{
+        @extend %button;
+        color: $color_one;
+        background-color:$color_three;
+
+        &:hover{
+            color: $color_three;
+            background-color: $color_one;
+        }
+    }
+}
