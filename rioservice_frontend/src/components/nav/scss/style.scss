@@ -2,18 +2,96 @@
 @import '../../scss/var';
 @import '../../scss/basicElements';
 
+$side: 40px;
+
 nav#navigation{
+    width: 100vw;
     background-color: $color_three;
-    padding: 4px;
+    padding: 8px;
+    box-shadow: 0 0 4px $color_two;
     
     ul{
         display: flex;
         justify-content: space-between;
         list-style: none;
+
+        li{
+            img#logo{
+                width: $side;
+                height: $side;
+                cursor: pointer;
+            }
+
+            button{
+                @extend %button;
+                padding: 0;
+                background-color: $color_one;
+                color: $color_three;
+
+                svg{
+                    display: grid;
+                    place-items: center;
+                    width: $side;
+                    height: $side;
+                    #menu-icon{
+                        fill: $color_three;
+                    }
+                }
+
+                &:hover{
+                    background-color: $color_three;
+                    color: $color_one;
+                    svg{
+                        #menu-icon{
+                            fill: $color_one;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    button{
-        @extend %button;
-        margin: 4px;
+    div#menu{
+        z-index: 1;
+        top: 0;
+        right: 0;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background-color: $color_three;
+        flex-wrap: wrap;
+        max-width: 320px;
+        display:grid;
+        place-items: center;
+        border-left: solid 1px $color_one;
+        transition: all 0.5s ease-in-out;
+        
+        ul{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            li{ 
+                margin: 4px 0;
+                button{
+                    @extend %button;
+                    background-color: transparent;
+                    color: $color_one;
+
+                    &:hover{
+                        background-color: $color_one;
+                        color: $color_three;
+                    }
+                }
+            }
+        }
+    }
+    
+    div.menu-fechado{
+        transform: translateX(100%);
+    }
+    
+    div.menu-aberto{
+        transform: translateX(0);
     }
 }

@@ -1,0 +1,7 @@
+@use '../../../scss/reset';
+@import '../../../scss/var';
+
+section#cargos{
+    height: fit-content;
+    background-color: $color_two;
+}

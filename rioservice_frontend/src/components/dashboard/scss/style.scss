@@ -1,7 +1,65 @@
 @use '../../scss/reset';
 @import '../../scss/var';
+@import '../../scss/basicElements';
+
+$diff:100px;
+$side: 64px;
 
 section#dashboard{
-    height: 100vh;
+    height: calc(100vh - $diff);
     width: 100vw;
+
+    header > h1 {
+        height: 50px;
+        width: 100%;
+        text-align: center;
+        line-height: 50px;
+        font-family: sans-serif;
+        background-color: $color_one;
+        color: white;
+    }
+
+    ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: calc(100vh - $diff);
+        list-style: none;
+
+        li{
+            margin: 4px;
+            button{
+                @extend %button;
+                background-color: $color_one;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                svg{
+                    width: $side;
+                    height: $side;
+
+                    path.btn-icon{
+                        fill:white;
+                    }
+                }
+
+
+                &:hover{
+                    background-color: $color_three;
+                    color: $color_one;
+
+                    svg{
+                        path.btn-icon{
+                            fill: $color_one;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

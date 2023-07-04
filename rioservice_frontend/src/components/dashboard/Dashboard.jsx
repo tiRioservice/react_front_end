@@ -2,6 +2,9 @@ import { useState } from 'react'
 import './scss/style.scss';
 import Nav from '../nav/Nav';
 import DashboardContent from './DashboardContent';
+import Bases from '../subcomponents/bases/Bases';
+import Colaboradores from '../subcomponents/colaboradores/Colaboradores';
+import Cargos from '../subcomponents/cargos/Cargos';
 
 export default function Dashboard({user, logOut}){
     const [page, setPage] = useState("Dashboard")
@@ -9,11 +12,13 @@ export default function Dashboard({user, logOut}){
     const renderSwitch = ({page}) => {
         switch(page){
             case "Dashboard":
-                return <DashboardContent user={user}/>
+                return <DashboardContent setPage={setPage} user={user}/>
             case "Cargos":
-                return "Area de Cargos"
+                return <Cargos/>
             case "Colaboradores":
-                return "Area de Colaboradores"
+                return <Colaboradores user={user}/>
+            case "Bases":
+                return <Bases/>
             default:
                 return "Default"
         }

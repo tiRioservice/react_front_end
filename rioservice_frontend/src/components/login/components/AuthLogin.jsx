@@ -23,7 +23,9 @@ export default function authLogin(e, login, password, setLoggedIn, setUser) {
     .then(data => {
         const status = data.user_logged_in
         const user = {
-            "colab_nome": data.colab_nome,
+            "colab_matricla": data["colab_matricla"],
+            "colab_nome": data["colab_nome"],
+            "x-JWT": data["x-JWT"],
         }
 
         setUser(user)
