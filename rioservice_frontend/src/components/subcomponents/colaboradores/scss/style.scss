@@ -59,4 +59,12 @@ section#colaboradores{
             @extend %table-frame;
         }
     }
+
+    div#colab-details{
+        @extend %details;
+    }
+
+    div.colab-details-hidden{
+        display: none !important;
+    }
 }

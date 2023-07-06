@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-export default function ColabList({allColabs}){
+export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
     const [fetched, setFetched] = useState(false)
     const [allColabsFetched, setAllColabsFetched] = useState(undefined)
     const [colabs, setColabs] = useState(undefined)
@@ -9,10 +9,15 @@ export default function ColabList({allColabs}){
         setAllColabsFetched(allColabs)
     }
 
+    const getColab = (colab) => {
+        setCurrentColab(colab)
+        setHideDetails(false)
+    }
+
     const mapColabs = () => {
         setColabs(allColabs.data.map( colab => {
             return (
-                <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id}>
+                <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id} onClick={() => {getColab(colab)}}>
                     <td>
                         {colab.colab_matricula}
                     </td>
@@ -21,9 +26,6 @@ export default function ColabList({allColabs}){
                     </td>
                     <td>
                         {colab.colab_cpf}
-                    </td>
-                    <td>
-                        ico
                     </td>
                 </tr>
             )
@@ -48,10 +50,9 @@ export default function ColabList({allColabs}){
                 <table>
                     <thead>
                         <tr>
-                            <td>Mat</td>
+                            <td>Matr.</td>
                             <td>nome</td>
                             <td>CPF</td>
-                            <td>Ver</td>
                         </tr>
                     </thead>
                     <tbody>

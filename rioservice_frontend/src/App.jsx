@@ -13,7 +13,6 @@ function App() {
   const logOut = () => {
     setLoggedIn(false)
     setUser(undefined)
-    console.log("logOut")
   }
 
   useEffect(() => {

@@ -81,10 +81,99 @@
             }
 
             &:hover{
-                background-color: $color_one;
-                color: white;
+                background-color: $color_three;
+                color: $color_one;
             }
         }
     }
 
+}
+
+%details{
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width:100%;
+    border: 1px solid $color_one;
+    padding: 4px;
+    background-color: rgba(0,0,0,0.5);
+    display: grid;
+    place-items: center;
+
+    div.modal{
+        background-color: white;
+        padding: 8px;
+        border: 1px solid $color_one;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        header{}
+
+        ul#attributeList{
+            list-style: none;
+            height: fit-content;
+            width: 100%;
+            max-width: 320px;
+            li.box{
+                p.colab-text{
+                    font-weight: 600;
+                    width: 100%;
+                    text-align: center;
+                    span{
+                        font-weight: 400;
+                    }
+                    input.colab-input{
+                        @extend %basic-input;
+                    }
+                }
+            }
+        }
+
+        div.btnOrganizer{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
+            button{
+                margin: 8px;
+            }
+
+            button.btnCloseModal{
+                @extend %button;
+                background-color: $color_one;
+                color: white;
+    
+                &:hover{
+                    background-color: transparent;
+                    color: $color_one;
+                }
+            }
+    
+            button.btnEditColab{
+                @extend %button;
+                background-color: $color_one;
+                color: white;
+    
+                &:hover{
+                    background-color: transparent;
+                    color: $color_one;
+                }
+            }
+
+            button.btnEditSaveColab{
+                @extend %button;
+                background-color: transparent;
+                border-color: $color_amazon;
+                color: $color_amazon;
+    
+                &:hover{
+                    background-color: $color_amazon;
+                    color: white;
+                }
+            }
+        }
+
+    }
 }
