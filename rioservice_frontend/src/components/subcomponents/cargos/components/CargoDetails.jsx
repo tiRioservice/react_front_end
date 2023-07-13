@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
-import { updateColab } from './ColabCrud';
+import { useEffect, useState } from "react";
 
-export default function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
+export default function CargoDetails({hideDetails, setHideDetails, currentCargo, jwt, host}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
 
@@ -32,7 +31,6 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
         }
 
         colabFields.forEach( field => {
-            console.log(field);
             const firstChild = field.children[0]
             if(firstChild.nodeName !== 'SPAN'){
                 if(firstChild.value){
@@ -54,8 +52,8 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
     }
     
     useEffect(() => {
-        if(currentColab != undefined && !editing){
-            const date = currentColab.registro
+        if(currentCargo != undefined && !editing){
+            const date = currentCargo.registro
             const splited = date.split(' ')
             const dia = splited[1]
             const mes = splited[2]
@@ -63,32 +61,20 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
             const hora = splited[4]
             const registro = `${dia} de ${mes} de ${ano} às ${hora}`
 
-            const colabFields = document.querySelectorAll('.colab-text')
-            colabFields.forEach( field => {
+            const cargoFields = document.querySelectorAll('.cargo-text')
+            cargoFields.forEach( field => {
                 let capitalizedField = undefined
                 if(field.classList[1] != 'registro'){
-                    if(field.classList[1] === 'colab_est_civil'){
-                        capitalizedField = 'Estado civil'
-                    } else if(field.classList[1] === 'colab_centro_custo'){
-                        capitalizedField = 'Centro de custo'
-                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
-                    } else if(field.classList[1] === 'colab_status'){ 
-                        capitalizedField = 'Status'
-                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == 0)?('INATIVO'):('ATIVO')}</span>`
-                    } else {
-                        capitalizedField = field.classList[1].split('_')[1].charAt(0).toUpperCase() + field.classList[1].split('_')[1].slice(1)
-                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
-                    }
-
+                    capitalizedField = field.classList[1].split('_')[1].charAt(0).toUpperCase() + field.classList[1].split('_')[1].slice(1)
+                    field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentCargo[field.classList[1]] == null)?('Não definido'):(currentCargo[field.classList[1]])}</span>`
                 } else {
                     capitalizedField = field.classList[1].charAt(0).toUpperCase() + field.classList[1].slice(1)
-                    field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(registro)}</span>`
+                    field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentCargo[field.classList[1]] == null)?('Não definido'):(registro)}</span>`
                 }
-                
 
             })
         }
-    }, [currentColab])
+    }, [currentCargo])
 
     useEffect(() => {
         if(editing){
@@ -107,7 +93,6 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
                     input.setAttribute('class', 'colab-input')
 
                     const attribute = span.innerText !== 'Não definido' ? span.innerHTML : ''
-                    console.log(attribute)
                     input.setAttribute('value', attribute)
 
                     if(field.classList[1] === 'colab_est_civil'){
@@ -136,59 +121,23 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
     }, [editing])
     
     return (
-        <div id="colab-details" className={!hideDetails ? '' : 'colab-details-hidden'}>
+        <div id="cargo-details" className={!hideDetails ? '' : 'cargo-details-hidden'}>
             <div className="modal">
                 <header>
-                    <h2>Detalhes do Colaborador</h2>
+                    <h2>Detalhes do Cargo</h2>
                 </header>
                 <ul id="attributeList">
                     <li className="box">
-                        <p className="colab-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
+                        <p className="cargo-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
                     </li>
                     <li className="box">
-                        <p className="colab-text colab_id">ID: <span className="colab_id_value">####</span></p>
+                        <p className="cargo-text cargo_id">ID: <span className="cargo_id_value">id</span></p>
                     </li>
                     <li className="box">
-                        <p className="colab-text colab_matricula">Matricula: <span className="colab_matricula_value">####</span></p>
+                        <p className="cargo-text cargo_nome">Nome: <span className="cargo_nome_value">nome</span></p>
                     </li>
                     <li className="box">
-                        <p className="colab-text colab_nome">Nome: <span className="colab_nome_value">Nome do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_nascimento">Data de nascimento: <span className="colab_nascimento_value">Data de nascimento do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_cpf">CPF: <span className="colab_cpf_value">CPF do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_rg">RG: <span className="colab_rg_value">RG do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_est_civil">Estado civil: <span className="colab_est_civil_value">Estado civil do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_naturalidade">Naturalidade: <span className="colab_naturalidade_value">Naturalidade do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_fone">Telefone (res): <span className="colab_fone_value">Telefone do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_celular">Celular: <span className="colab_celular_value">Celular do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_escolaridade">Escolaridade: <span className="colab_escolaridade_value">Escolaridade do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_admissao">Admissão: <span className="colab_admissao_value">Admissão do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_email">Email: <span className="colab_email_value">Email do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_centro_custo">Centro de custo: <span className="colab_centro_custo_value">Centro de custo do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_status">Status: <span className="colab_status_value">Status do colaborador</span></p>
+                        <p className="cargo-text cargo_desc">Desc: <span className="cargo_desc_value">desc</span></p>
                     </li>
                 </ul>
 

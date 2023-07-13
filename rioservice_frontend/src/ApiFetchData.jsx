@@ -1,5 +1,5 @@
-export default async function apiFetchData(setData) {
-    await fetch("http://18.228.46.50/app/data")
+export default async function apiFetchData(setData, host) {
+    await fetch(`http://${host}/app/data`)
     .then(res => res.json())
     .then(data => {
         setData({

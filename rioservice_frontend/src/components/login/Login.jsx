@@ -4,7 +4,7 @@ import Form from './components/Form';
 import './scss/style.scss';
 import Ver from './components/Ver';
 
-export default function Login({data, appVersion, setLoggedIn, setUser}) {
+export default function Login({data, appVersion, setLoggedIn, setUser, host}) {
     return (
         <>
             <section id="loginScreen">
@@ -12,7 +12,7 @@ export default function Login({data, appVersion, setLoggedIn, setUser}) {
                     <div className="logoWrapper">
                         <Logo/>
                     </div>
-                    <Form setLoggedIn={setLoggedIn} setUser={setUser}/>
+                    <Form host={host} setLoggedIn={setLoggedIn} setUser={setUser}/>
                     <Ver api_version={data.api_version} app_version={appVersion}/>
                 </div>
             </section>

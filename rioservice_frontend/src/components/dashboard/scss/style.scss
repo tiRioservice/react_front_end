@@ -26,7 +26,7 @@ section#dashboard{
         align-items: center;
         flex-wrap: wrap;
         width: 100%;
-        height: calc(100vh - $diff);
+        height: fit-content;
         list-style: none;
 
         li{
@@ -60,6 +60,19 @@ section#dashboard{
                     }
                 }
             }
+        }
+    }
+
+    div.mensagem{
+        width: 100%;
+        text-align: center;
+        padding: 4px;
+        min-height: 120px;
+        line-height: 40px;
+        color: $color_one;
+
+        p{
+            font-size: 1.2em;
         }
     }
 }

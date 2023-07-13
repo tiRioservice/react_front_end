@@ -1,9 +1,8 @@
-export default function Menu({menuOpen, setMenuOpen, setPage, logOut, user}) {
+export default function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen}) {
     return (
         <>
             <div id="menu" className={!menuOpen ? "menu-fechado" : "menu-aberto"}>
                 <ul>
-                    <p>Usuario logado: {user.colab_nome}</p>
                     <li>
                         <button onClick={() => {
                             setMenuOpen(false)
@@ -25,22 +24,37 @@ export default function Menu({menuOpen, setMenuOpen, setPage, logOut, user}) {
                     <li>
                         <button onClick={() => {
                             setMenuOpen(false)
+                            setPage("Cargos")
+                        }}>
+                            Cargos
+                        </button>
+                    </li>
+
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
                             setPage("Bases")
                         }}>
                             Bases
                         </button>
                     </li>
-
+                    --- x ---
                     <li>
-                        <button onClick={() => setMenuOpen(false)}>Fechar menu</button>
+                        <button className="profile" onClick={() => {
+                            setProfileOpen(true)
+                        }}>
+                            Perfil
+                        </button>
                     </li>
-
                     <li>
-                        <button onClick={() => logOut()}>
+                        <button
+                        className="logout" onClick={() => logOut()}>
                             Deslogar
                         </button>
                     </li>
+
                 </ul>
+                <button className="quitBtn" onClick={() => setMenuOpen(false)}>X</button>
             </div>
         </>
     )

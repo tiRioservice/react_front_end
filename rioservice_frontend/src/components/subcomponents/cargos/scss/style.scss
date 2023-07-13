@@ -1,7 +1,28 @@
 @use '../../../scss/reset';
 @import '../../../scss/var';
+@import '../../../scss/basicElements';
 
 section#cargos{
     height: fit-content;
-    background-color: $color_two;
+
+    div.panel{
+        @extend %panel;
+    }
+
+    div#cargo-list{
+        margin: 0 8px;
+        border-radius: 4px;border: solid 1px $color_one;
+
+        table{
+            @extend %table-frame;
+        }
+    }
+
+    div#cargo-details{
+        @extend %details;
+    }
+
+    div.cargo-details-hidden{
+        display: none !important;
+    }
 }

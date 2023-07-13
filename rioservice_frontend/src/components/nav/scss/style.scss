@@ -64,7 +64,7 @@ nav#navigation{
         display:grid;
         place-items: center;
         border-left: solid 1px $color_one;
-        transition: all 0.5s ease-in-out;
+        transition: all 0.4s ease-in-out;
         
         ul{
             display: flex;
@@ -83,8 +83,120 @@ nav#navigation{
                         color: $color_three;
                     }
                 }
+
+                button.profile{
+                    background-color:white;
+                    color: $color_one;
+                    &:hover{
+                        background-color: $color_one;
+                        color: $color_three;
+                    }
+                }
+
+                button.logout{
+                    font-weight: bold;
+                    border-color: $color_cinnabar;
+                    background-color: $color_red_bg;
+                    color: white;
+
+                    &:hover{
+                        color: $color_cinnabar;
+                    }
+                }
             }
         }
+
+        button.quitBtn{
+            @extend %button;
+            background-color: transparent;
+            color: $color_one;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
+    div#profile{
+        z-index: 2;
+        top: 0;
+        left: 0;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background-color: white;
+        flex-wrap: wrap;
+        max-width: 320px;
+        display:grid;
+        place-items: center;
+        border-right: solid 1px $color_three;
+        transition: all 0.4s ease-in-out;
+
+        h1{
+            font-family: sans-serif;
+            color: $color_one;
+        }
+
+        div.data{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            height: 100%;
+
+            div.organizer{
+                margin-top: 16px;
+
+                p.trocar_senha{
+                    color: $color_one;
+                    border-radius: 4px;
+                    background-color: transparent;
+                    button.trocar_senha-btn{
+                        @extend %button;
+                        background-color: transparent;
+
+                        &:hover{
+                            background-color: $color_one;
+                            color: $color_three;
+                        }
+                    }
+                }
+
+                div#trocarSenha{
+                    form#passChangeForm{
+                        display: flex;
+                        flex-direction: column;
+
+                        input.input_pass{
+                            @extend %basic-input;
+                        }
+
+                        button{
+                            @extend %button;
+                        }
+                    }
+                }
+            }
+
+            button.profileCloseBtn{
+                @extend %button;
+                background-color: transparent;
+                border-color: black;
+                color: black;
+                font-weight: bold;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    }
+
+    div.profile-open{
+        transform: translateX(0);
+    }
+
+    div.profile-closed{
+        transform: translateX(-100%);
     }
     
     div.menu-fechado{

@@ -1,13 +1,12 @@
-const host = "18.228.46.50"
-
 export default function ColabCrud() {
     return {
         insertColab,
-        getColabList
+        getColabList,
+        updateColab
     }
 }
 
-export async function insertColab(colab_data) {
+export async function insertColab(colab_data, setFeedbackMessage, host) {
     const options = {
         method: "POST",
         headers: {
@@ -21,11 +20,11 @@ export async function insertColab(colab_data) {
     await fetch(`http://${host}/app/auth/signup`, options)
     .then(res => res.json())
     .then(data => {
-        console.log(data)
+        setFeedbackMessage(data.msg)
     })
 }
 
-export async function getColabList(jwt, setAllColabs) {
+export async function getColabList(jwt, setAllColabs, host) {
     const options = {
         method: "GET",
         headers: {
@@ -38,5 +37,35 @@ export async function getColabList(jwt, setAllColabs) {
     .then(res => res.json())
     .then(data => {
         setAllColabs(data)
+    })
+}
+
+export async function updateColab(jwt, data, setStatusMessage, host){
+    console.log("Enviando requisicao para o servidor")
+    console.log("jwt: " + jwt)
+    console.log("data: " + data)
+
+    const colab_data = {
+        "colab_id": data.colab_id,
+        "colab_matricula": data.colab_matricula,
+        "colab_nome": data.colab_nome,
+        "colab_cpf": data.colab_cpf,
+        "colab_login": data.colab_login
+    }
+
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + jwt,
+        },
+        body: JSON.stringify(colab_data)
+    }
+
+    await fetch(`http://${host}/app/v2/colaboradores/atualizar`, options)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        setStatusMessage(data.msg)
     })
 }

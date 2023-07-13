@@ -5,50 +5,7 @@
 section#colaboradores{
 
     div.panel{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 200px;
-        padding: 8px;
-        // background-color:green;
-        height: 100%;
-
-        button{
-            @extend %button;
-            background-color: $color_one;
-            color: white;
-
-            &:hover{
-                background-color: transparent;
-                color: $color_one;
-            }
-        }
-
-        form {
-            max-width: 640px;
-            width: 100%;
-            // background-color: red;
-            height: 100%;
-
-            div.inputBox{
-                width: 100%;
-                display: flex;
-                margin: 8px 0;
-
-                label{
-                    @extend %form-label;
-                }
-                input{
-                    @extend %form-input;
-                }
-            }
-
-            p.alerta-senha{
-                color: $color_one;
-                margin:8px;
-            }
-        }
+        @extend %panel;
     }
 
     div#colab-list{

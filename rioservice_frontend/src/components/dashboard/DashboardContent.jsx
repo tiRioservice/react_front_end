@@ -3,7 +3,10 @@
 export default function DashboardContent({user, setPage}){
     return (
         <>
-            <p>Mensagem</p>
+            <div className="mensagem">
+                <h2>Olá, {user["colab_nome"]}!</h2>
+                <p>Esta é a sua dashboard, aqui poderá realizar algumas operações. Selecione uma área abaixo ou comece pelo menu acima a direita!</p>
+            </div>
             <ul>
                 <li>
                     <button onClick={() => setPage("Bases")}>

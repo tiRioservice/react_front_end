@@ -6,19 +6,19 @@ import Bases from '../subcomponents/bases/Bases';
 import Colaboradores from '../subcomponents/colaboradores/Colaboradores';
 import Cargos from '../subcomponents/cargos/Cargos';
 
-export default function Dashboard({user, logOut}){
+export default function Dashboard({user, logOut, host}){
     const [page, setPage] = useState("Dashboard")
 
     const renderSwitch = ({page}) => {
         switch(page){
             case "Dashboard":
-                return <DashboardContent setPage={setPage} user={user}/>
+                return <DashboardContent host={host} setPage={setPage} user={user}/>
             case "Cargos":
-                return <Cargos/>
+                return <Cargos host={host} user={user}/>
             case "Colaboradores":
-                return <Colaboradores user={user}/>
+                return <Colaboradores host={host} user={user}/>
             case "Bases":
-                return <Bases/>
+                return <Bases host={host} user={user}/>
             default:
                 return "Default"
         }

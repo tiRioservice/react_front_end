@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import AreaAlert from '../../common/AreaAlert';
 
 export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
     const [fetched, setFetched] = useState(false)
@@ -7,6 +8,10 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
 
     const fetchColabs = () => {
         setAllColabsFetched(allColabs)
+
+        if (allColabsFetched !== undefined) {
+            setFetched(true)
+        }
     }
 
     const getColab = (colab) => {
@@ -19,7 +24,10 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
             return (
                 <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id} onClick={() => {getColab(colab)}}>
                     <td>
-                        {colab.colab_matricula}
+                        {colab.colab_id}
+                    </td>
+                    <td>
+                        {colab.colab_matricula == 0 ? 'N/A' : colab.colab_matricula}
                     </td>
                     <td>
                         {colab.colab_nome}
@@ -34,24 +42,27 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
 
 
     useEffect(() => {
-        if(!fetched){
-            allColabsFetched == undefined && fetchColabs();
-        } else {
-            mapColabs();
+        if(allColabs){
+            if(!fetched){
+                if(!allColabs.msg){
+                    allColabsFetched == undefined && fetchColabs();
+                    mapColabs();
+                }
+            }
         }
-
-        allColabsFetched != undefined && setFetched(true);
 
     }, [allColabs, allColabsFetched])
 
     return (
         <>
-            <div id="colab-list">
+            {(colabs !== undefined) ?
+            (<div id="colab-list">
                 <table>
                     <thead>
                         <tr>
+                            <td>ID</td>
                             <td>Matr.</td>
-                            <td>nome</td>
+                            <td>Nome</td>
                             <td>CPF</td>
                         </tr>
                     </thead>
@@ -59,7 +70,8 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
                         {colabs}
                     </tbody>
                 </table>
-            </div>
+            </div>)
+            : (<AreaAlert frase="Não há colaboradores registrados! Experimente inserir um para que o sistema possa indexá-lo!"/>)}
         </>
     )
 }
