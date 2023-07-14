@@ -296,6 +296,16 @@
                     @extend %form-input;
                     height: fit-content;
                 }
+
+                input[type="checkbox"]{
+                    width: 24px;
+                    height: 24px;
+                    margin: 0 8px;
+                }
+            }
+
+            div.formEnd{
+                width: 100%;
             }
 
             div.organizer{
@@ -356,4 +366,17 @@
 %area-alert{
     width: 100%;
     text-align:center;
+}
+
+%read-only-input{
+    border: 1px solid $color_one;
+    background-color:$color_two;
+    color: white;
+    outline: none;
+
+    &:focus{
+        border: 1px solid $color_one;
+        background-color:$color_two;
+        color: white;
+    }
 }

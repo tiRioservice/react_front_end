@@ -18,3 +18,7 @@ html, body {
 .areaAlert{
     @extend %area-alert;
 }
+
+.readOnlyInput{
+    @extend %read-only-input;
+}

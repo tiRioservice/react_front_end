@@ -6,8 +6,7 @@ export default function BaseCrud() {
     }
 }
 
-export async function insertBase(base_data, setFeedbackMessage, jwt, host) {
-    console.log("data", base_data)
+export async function insertBase(base_data, setFeedbackMessage, jwt, host, setBase_inserted) {
     const options = {
         method: "POST",
         headers: {
@@ -23,6 +22,7 @@ export async function insertBase(base_data, setFeedbackMessage, jwt, host) {
     .then(res => res.json())
     .then(data => {
         setFeedbackMessage(data.msg)
+        setBase_inserted(data.base_inserted)
     })
 }
 
@@ -43,7 +43,6 @@ export async function getBaseList(jwt, setAllBases, host) {
 }
 
 export async function updateBase(jwt, data, setStatusMessage, host){
-
     const base_data = {
         "base_id": data.base_id,
         "base_nome": data.base_nome,
