@@ -5,8 +5,9 @@ import DashboardContent from './DashboardContent';
 import Bases from '../subcomponents/bases/Bases';
 import Colaboradores from '../subcomponents/colaboradores/Colaboradores';
 import Cargos from '../subcomponents/cargos/Cargos';
+import PropTypes from "prop-types";
 
-export default function Dashboard({user, logOut, host}){
+function Dashboard({user, logOut, host}){
     const [page, setPage] = useState("Dashboard")
 
     const renderSwitch = ({page}) => {
@@ -26,7 +27,7 @@ export default function Dashboard({user, logOut, host}){
 
     return (
         <>
-            <Nav user={user} logOut={logOut} setPage={setPage}/>
+            <Nav user={user} host={host} logOut={logOut} setPage={setPage}/>
             <section id="dashboard">
                 <header>
                     <h1>{page}</h1>
@@ -36,3 +37,11 @@ export default function Dashboard({user, logOut, host}){
         </>
     )
 }
+
+Dashboard.propTypes = {
+    user: PropTypes.object.isRequired,
+    logOut: PropTypes.func.isRequired,
+    host: PropTypes.string.isRequired
+}
+
+export default Dashboard

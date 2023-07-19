@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import passChange from "./PassChange";
+import PropTypes from "prop-types";
 
-export default function PassChangeForm({user, setTrocarSenhaOpen}) {
+function PassChangeForm({user, setTrocarSenhaOpen}) {
     const [feedbackMessage, setFeedbackMessage] = useState(undefined)
     const [match, setMatch] = useState(true)
     const test = (e) => {
@@ -43,3 +44,10 @@ export default function PassChangeForm({user, setTrocarSenhaOpen}) {
         </>
     )
 }
+
+PassChangeForm.propTypes = {
+    user: PropTypes.object.isRequired,
+    setTrocarSenhaOpen: PropTypes.func.isRequired
+}
+
+export default PassChangeForm

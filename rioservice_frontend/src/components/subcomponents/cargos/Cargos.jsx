@@ -16,7 +16,7 @@ export default function Cargos({user, host}){
         const crud = new CargoCrud();
         const jwt = user["x-JWT"]
         crud.getCargoList(jwt, setAllCargos, host)
-    }, [insert])
+    }, [])
 
     useEffect(() => {
         if(currentCargo !== undefined){

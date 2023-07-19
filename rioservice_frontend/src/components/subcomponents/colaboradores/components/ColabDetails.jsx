@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react"
-import { updateColab } from './ColabCrud';
+import { useEffect, useState } from "react";
+import EnderecoDetails from "../../common/EnderecoDetails";
+import PropTypes from "prop-types";
 
-export default function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
+function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
+    const [endId, setEndId] = useState(undefined)
 
     const handleEdit = () => {
         setEditing(true)
     }
 
     const handleEditSave = () => {
+        console.log(jwt, host)
+        setStatusMessage('Salvando alterações...')
         const colabFields = document.querySelectorAll('.colab-text')
         const data = {
             "colab_id": undefined,
@@ -87,8 +91,10 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
                 
 
             })
+
+            setEndId(currentColab.end_id)
         }
-    }, [currentColab])
+    }, [currentColab, editing])
 
     useEffect(() => {
         if(editing){
@@ -192,6 +198,10 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
                     </li>
                 </ul>
 
+                {(endId !== undefined && endId !== null) 
+                ? (<EnderecoDetails jwt={jwt} host={host} end_id={endId} />) 
+                : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
+
                 <div className="btnOrganizer">
                     {(!editing) ? (
                         <button className="btnEdit" onClick={() => handleEdit()}>Editar</button>
@@ -213,3 +223,13 @@ export default function ColabDetails({hideDetails, setHideDetails, currentColab,
         </div>
     )
 }
+
+ColabDetails.propTypes = {
+    hideDetails: PropTypes.bool,
+    setHideDetails: PropTypes.func,
+    currentColab: PropTypes.object,
+    jwt: PropTypes.string,
+    host: PropTypes.string
+}
+
+export default ColabDetails;

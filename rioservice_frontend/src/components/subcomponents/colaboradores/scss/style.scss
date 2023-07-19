@@ -3,6 +3,7 @@
 @import '../../../scss/basicElements';
 
 section#colaboradores{
+    height: fit-content;
 
     div.panel{
         @extend %panel;

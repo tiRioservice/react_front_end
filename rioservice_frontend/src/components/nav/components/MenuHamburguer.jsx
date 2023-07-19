@@ -1,4 +1,6 @@
-export default function MenuHamburguer({setMenuOpen, menuOpen}) {
+import PropsTypes from 'prop-types';
+
+function MenuHamburguer({setMenuOpen, menuOpen}) {
     return (
         <>
             <button className="menu-hamburguer" onClick={() => {setMenuOpen(!menuOpen)}}>
@@ -7,3 +9,10 @@ export default function MenuHamburguer({setMenuOpen, menuOpen}) {
         </>
     )
 }
+
+MenuHamburguer.propTypes = {
+    setMenuOpen: PropsTypes.func.isRequired,
+    menuOpen: PropsTypes.bool.isRequired
+}
+
+export default MenuHamburguer

@@ -19,7 +19,12 @@ nav#navigation{
             img#logo{
                 width: $side;
                 height: $side;
+                transition: all 0.4s ease-in-out;
                 cursor: pointer;
+
+                &:hover{
+                    filter: drop-shadow(0 0 4px $color_two);
+                }
             }
 
             button{
@@ -114,6 +119,11 @@ nav#navigation{
             position: absolute;
             top: 10px;
             right: 10px;
+
+            &:hover{
+                background-color: $color_one;
+                color: $color_three;
+            }
         }
     }
 
@@ -122,35 +132,90 @@ nav#navigation{
         top: 0;
         left: 0;
         position: fixed;
+        border-radius: 4px;
         width: 100%;
         height: 100vh;
         background-color: white;
         flex-wrap: wrap;
-        max-width: 320px;
         display:grid;
         place-items: center;
         border-right: solid 1px $color_three;
         transition: all 0.4s ease-in-out;
+        overflow-y: scroll;
+        filter: drop-shadow(0 0 4px $color_two);
 
-        h1{
-            font-family: sans-serif;
-            color: $color_one;
+        h1, h2{
+            font-size: 20px;
+            padding: 8px;
+            margin: 8px 0;
+            color: white;
+            background-color: $color_one;
+            border-radius: 4px;
+            width: 100%;
         }
 
         div.data{
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
             justify-content: center;
-            height: 100%;
+            padding: 4px;
+
+            p.user-attributes{
+                font-weight: bold;
+                padding: 4px;
+                border: solid 1px $color_one;
+                border-radius: 4px;
+                margin: 4px;
+                flex-grow: 1;
+
+                span{
+                    font-weight: normal;
+                }
+            }
+
+            div.endDetails{
+                width: 100%;
+                height: auto;
+    
+                div.endereco{
+                    display: flex;
+                    flex-direction: column;
+    
+                    div.box{
+                        padding: 4px;
+                        border: solid 1px $color_one;
+                        border-radius: 4px;
+                        margin: 4px;
+                        flex-grow: 1;
+    
+                        p.end-text{
+                            font-weight: bold;
+                            width: 100%;
+    
+                            span{
+                                margin-left: 8px;
+                                font-weight: 400;
+                            }
+                        }
+                    }
+    
+                    @media screen and (min-width: 425px){
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                    }
+                }
+            }
 
             div.organizer{
-                margin-top: 16px;
+                margin: 16px 0;
 
                 p.trocar_senha{
                     color: $color_one;
                     border-radius: 4px;
                     background-color: transparent;
+
                     button.trocar_senha-btn{
                         @extend %button;
                         background-color: transparent;
@@ -174,19 +239,59 @@ nav#navigation{
                         button{
                             @extend %button;
                         }
+
+                        @media screen and (min-width: 425px){
+                            display: flex;
+                            flex-direction: row;
+                            align-items: baseline;
+                            input.input_pass{
+                                width: 100%;
+                                margin-right: 8px;
+                            }
+                        }
                     }
                 }
             }
 
             button.profileCloseBtn{
                 @extend %button;
-                background-color: transparent;
+                background-color: white;
                 border-color: black;
                 color: black;
                 font-weight: bold;
                 position: absolute;
-                top: 10px;
-                right: 10px;
+                top: 13px;
+                right: 4px;
+
+                &:hover{
+                    background-color: $color_one;
+                    color: white;
+                }
+            }
+        }
+
+        @media screen and (min-width: 425px){
+            padding: 32px;
+
+            div.data{
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        }
+
+        @media screen and (min-width: 768px){
+            width: 90%;
+            max-width: 100%;
+            height: 70vh;
+            top: calc(40vh - 25vh);
+            left: calc(50vw - 45vw);
+            padding: 32px;
+
+            div.data{
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
             }
         }
     }
@@ -196,11 +301,11 @@ nav#navigation{
     }
 
     div.profile-closed{
-        transform: translateX(-100%);
+        transform: translateX(-100vw);
     }
     
     div.menu-fechado{
-        transform: translateX(100%);
+        transform: translateX(100vw);
     }
     
     div.menu-aberto{

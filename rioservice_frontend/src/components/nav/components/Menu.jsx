@@ -1,4 +1,6 @@
-export default function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen}) {
+import PropTypes from 'prop-types'
+
+function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocarSenhaOpen}) {
     return (
         <>
             <div id="menu" className={!menuOpen ? "menu-fechado" : "menu-aberto"}>
@@ -54,8 +56,23 @@ export default function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfile
                     </li>
 
                 </ul>
-                <button className="quitBtn" onClick={() => setMenuOpen(false)}>X</button>
+                <button className="quitBtn" onClick={() => {
+                    setMenuOpen(false)
+                    setProfileOpen(false)
+                    setTrocarSenhaOpen(false)
+                    }}>X</button>
             </div>
         </>
     )
 }
+
+Menu.propTypes = {
+    menuOpen: PropTypes.bool.isRequired,
+    setMenuOpen: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
+    logOut: PropTypes.func.isRequired,
+    setProfileOpen: PropTypes.func.isRequired,
+    setTrocarSenhaOpen: PropTypes.func.isRequired
+}
+
+export default Menu

@@ -114,38 +114,55 @@
         border-radius: 4px;
         display: flex;
         flex-direction: column;
-        align-items: center;
 
-        header{
+        h2{
+            font-size: 20px;
             padding: 8px;
+            margin: 8px 0;
+            color: white;
+            background-color: $color_one;
             border-radius: 4px;
-            color: $color_one;
+            width: 100%;
         }
 
         ul#attributeList{
-            margin: 64px 0;
             list-style: none;
             height: auto;
-            width: inherit;
+            width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: baseline;
 
             li.box{
-                flex: content;
+                padding: 4px;
+                border: solid 1px $color_one;
+                border-radius: 4px;
+                margin: 4px;
+                width: 100%;
+                
                 p.colab-text, p.cargo-text, p.base-text{
                     font-weight: 600;
                     width: 100%;
-                    text-align: center;
+                    
                     span{
                         font-weight: 400;
                     }
-                    input.colab-input, input.cargo-input{
+                    
+                    input.colab-input, input.cargo-input, input.base-input{
                         @extend %basic-input;
                     }
-
+                    
                     select.colab-input, select.cargo-input{
                         @extend %basic-input;
                     }
+                }
+                
+                @media screen and (min-width: 425px){
+                    flex-basis: max-content;
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                    flex-wrap: wrap;
+                    height: fit-content;
                 }
             }
 
@@ -153,6 +170,47 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: space-between;
+            }
+        }
+
+        h2.detailsAdvice{
+            font-size: 14px;
+            font-weight: 600;
+            color: $color_one;
+            margin: 8px 0;
+        }
+
+        div.endDetails{
+            width: 100%;
+            height: auto;
+
+            div.endereco{
+                display: flex;
+                flex-direction: column;
+
+                div.box{
+                    padding: 4px;
+                    border: solid 1px $color_one;
+                    border-radius: 4px;
+                    margin: 4px;
+                    flex-grow: 1;
+
+                    p.end-text{
+                        font-weight: bold;
+                        width: 100%;
+
+                        span{
+                            margin-left: 8px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+
+                @media screen and (min-width: 425px){
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                }
             }
         }
 
@@ -306,6 +364,11 @@
 
             div.formEnd{
                 width: 100%;
+                
+                @media screen and (min-width: 425px) {
+                    display: flex;
+                    flex-wrap: inherit;
+                }
             }
 
             div.organizer{

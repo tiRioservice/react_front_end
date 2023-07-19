@@ -1,18 +1,11 @@
-export default function ColabCrud() {
-    return {
-        insertColab,
-        getColabList,
-        updateColab
-    }
-}
-
-export async function insertColab(colab_data, setFeedbackMessage, host) {
+export async function InsertColab(colab_data, setFeedbackMessage, jwt, host, setColab_inserted) {
     const options = {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Accept": "*/*",
             "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + jwt
         },
         body: JSON.stringify(colab_data)
     }
@@ -21,10 +14,11 @@ export async function insertColab(colab_data, setFeedbackMessage, host) {
     .then(res => res.json())
     .then(data => {
         setFeedbackMessage(data.msg)
+        setColab_inserted(data.colab_inserted)
     })
 }
 
-export async function getColabList(jwt, setAllColabs, host) {
+export async function GetColabList(jwt, setAllColabs, host) {
     const options = {
         method: "GET",
         headers: {
@@ -40,7 +34,7 @@ export async function getColabList(jwt, setAllColabs, host) {
     })
 }
 
-export async function updateColab(jwt, data, setStatusMessage, host){
+export async function UpdateColab(jwt, data, setStatusMessage, host){
     console.log("Enviando requisicao para o servidor")
     console.log("jwt: " + jwt)
     console.log("data: " + data)
@@ -68,4 +62,12 @@ export async function updateColab(jwt, data, setStatusMessage, host){
         console.log(data)
         setStatusMessage(data.msg)
     })
+}
+
+export default function ColabCrud() {
+    return {
+        insertColab: InsertColab,
+        getColabList: GetColabList,
+        updateColab: UpdateColab,
+    }
 }

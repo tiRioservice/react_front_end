@@ -1,12 +1,4 @@
-export default function BaseCrud() {
-    return {
-        insertBase,
-        getBaseList,
-        updateBase
-    }
-}
-
-export async function insertBase(base_data, setFeedbackMessage, jwt, host, setBase_inserted) {
+export async function InsertBase(base_data, setFeedbackMessage, jwt, host, setBase_inserted) {
     const options = {
         method: "POST",
         headers: {
@@ -26,7 +18,7 @@ export async function insertBase(base_data, setFeedbackMessage, jwt, host, setBa
     })
 }
 
-export async function getBaseList(jwt, setAllBases, host) {
+export async function GetBaseList(jwt, setAllBases, host) {
     const options = {
         method: "GET",
         headers: {
@@ -42,11 +34,12 @@ export async function getBaseList(jwt, setAllBases, host) {
     })
 }
 
-export async function updateBase(jwt, data, setStatusMessage, host){
+export async function UpdateBase(jwt, data, setStatusMessage, host){
     const base_data = {
         "base_id": data.base_id,
         "base_nome": data.base_nome,
-        "base_desc": data.base_desc
+        "base_desc": data.base_desc,
+        "end_id": data.end_id,
     }
 
     const options = {
@@ -63,4 +56,12 @@ export async function updateBase(jwt, data, setStatusMessage, host){
     .then(data => {
         setStatusMessage(data.msg)
     })
+}
+
+export default function BaseCrud() {
+    return {
+        insertBase: InsertBase,
+        getBaseList: GetBaseList,
+        updateBase: UpdateBase
+    }
 }

@@ -2,7 +2,9 @@ export default function EndCrud() {
     return {
         insertEnd,
         getEndList,
-        getEndId,
+        getEndData,
+        getEndBaseId,
+        getEndColabId,
         updateEnd
     }
 }
@@ -43,7 +45,24 @@ export async function getEndList(jwt, setAllEnds, host) {
     })
 }
 
-export async function getEndId(endRequiredData, jwt, host, baseData, setBaseData) {
+export async function getEndData(body, jwt, host, setEnd) {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + jwt,
+        },
+        body: JSON.stringify(body)
+    }
+
+    await fetch(`http://${host}/app/v2/enderecos/buscar`, options)
+    .then(res => res.json())
+    .then(data => {
+        setEnd(data)
+    })
+}
+
+export async function getEndBaseId(endRequiredData, jwt, host, baseData, setBaseData) {
     const options = {
         method: "POST",
         headers: {
@@ -57,6 +76,23 @@ export async function getEndId(endRequiredData, jwt, host, baseData, setBaseData
     .then(res => res.json())
     .then(data => {
         setBaseData({...baseData, "end_id": data.end_id})
+    })
+}
+
+export async function getEndColabId(endRequiredData, jwt, host, colabData, setColabData) {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + jwt,
+        },
+        body: JSON.stringify(endRequiredData)
+    }
+
+    await fetch(`http://${host}/app/v2/enderecos/buscar_id`, options)
+    .then(res => res.json())
+    .then(data => {
+        setColabData({...colabData, "end_id": data.end_id})
     })
 }
 

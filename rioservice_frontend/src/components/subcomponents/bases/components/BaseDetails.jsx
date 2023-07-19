@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import EnderecoDetails from "../../common/EnderecoDetails";
+import PropTypes from "prop-types";
 
-export default function BaseDetails({hideDetails, setHideDetails, currentBase, jwt, host}){
+function BaseDetails({hideDetails, setHideDetails, currentBase, jwt, host}){
     const [editing, setEditing] = useState(false)
-    const [statusMessage, setStatusMessage] = useState(undefined)
+    const [statusMessage] = useState(undefined)
+    const [endId, setEndId] = useState(undefined)
 
     const handleEdit = () => {
         setEditing(true)
@@ -74,8 +77,10 @@ export default function BaseDetails({hideDetails, setHideDetails, currentBase, j
 
             })
 
+            setEndId(currentBase.end_id)
+
         }
-    }, [currentBase])
+    }, [currentBase, editing])
 
     useEffect(() => {
         if(editing){
@@ -83,8 +88,8 @@ export default function BaseDetails({hideDetails, setHideDetails, currentBase, j
             let capitalizedField = undefined
 
             baseFields.forEach( field => {
-                if(field.classList[1] !== 'registro' 
-                && field.classList[1] !== 'base_id' 
+                if(field.classList[1] !== 'registro'
+                && field.classList[1] !== 'base_id'
                 && field.classList[1] !== 'base_matricula'){
                     const span = field.children[0]
                     capitalizedField = field.classList[1].split('_')[1].charAt(0).toUpperCase() + field.classList[1].split('_')[1].slice(1)
@@ -125,7 +130,7 @@ export default function BaseDetails({hideDetails, setHideDetails, currentBase, j
         <div id="base-details" className={!hideDetails ? '' : 'base-details-hidden'}>
             <div className="modal">
                 <header>
-                    <h2>Detalhes do Base</h2>
+                    <h2>Detalhes da Base</h2>
                 </header>
                 <ul id="attributeList">
                     <li className="box">
@@ -141,6 +146,10 @@ export default function BaseDetails({hideDetails, setHideDetails, currentBase, j
                         <p className="base-text base_desc">Desc: <span className="base_desc_value">desc</span></p>
                     </li>
                 </ul>
+
+                {(endId !== undefined && endId !== null) 
+                ? (<EnderecoDetails jwt={jwt} host={host} end_id={endId} />) 
+                : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
 
                 <div className="btnOrganizer">
                     {(!editing) ? (
@@ -163,3 +172,13 @@ export default function BaseDetails({hideDetails, setHideDetails, currentBase, j
         </div>
     )
 }
+
+BaseDetails.propTypes = {
+    hideDetails: PropTypes.bool,
+    setHideDetails: PropTypes.func,
+    currentBase: PropTypes.object,
+    jwt: PropTypes.string,
+    host: PropTypes.string
+}
+
+export default BaseDetails;

@@ -19,7 +19,7 @@ section#dashboard{
         color: white;
     }
 
-    ul{
+    ul.buttonList{
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -29,7 +29,7 @@ section#dashboard{
         height: fit-content;
         list-style: none;
 
-        li{
+        li.buttonListItem{
             margin: 4px;
             button{
                 @extend %button;
