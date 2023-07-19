@@ -1,16 +1,12 @@
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useState} from 'react';
 import BaseCrud from './BaseCrud';
 import EnderecoForm from '../../common/EnderecoForm';
 import EndCrud from '../../common/EndCrud';
 import PropTypes from 'prop-types';
 
 function CommandPanel({user, setInsert, host, setBaseInserted}){
-    const baseCrud = useMemo(undefined, ()=>{
-        return new BaseCrud()
-    })
-    const endCrud = useMemo(undefined, ()=>{
-        return new EndCrud()
-    });
+    const [baseCrud] = useState(new BaseCrud())
+    const [endCrud] = useState(new EndCrud())
     const [feedbackMessage, setFeedbackMessage] = useState(undefined)
     const [insertEndReady, setInsertEndReady] = useState(false)
     const [endereco_inserted, setEndereco_inserted] = useState(false)
