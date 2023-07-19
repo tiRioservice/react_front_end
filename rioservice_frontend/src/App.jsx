@@ -6,7 +6,7 @@ import Dashboard from './components/dashboard/Dashboard'
 import authLogout from './components/login/components/AuthLogout'
 
 function App() {
-  const [hostWithPortString] = useState("18.228.46.50") //IP do servidor = "18.228.46.50" || "localhost:8000"
+  const [hostWithPortString] = useState("localhost:8000") //IP do servidor = "18.228.46.50" || "localhost:8000"
   const [appVersion] = useState("1.0.0")
   const [data, setData] = useState({"data": false})
   const [user, setUser] = useState(undefined)
