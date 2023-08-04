@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     apiFetchData(setData, hostWithPortString)
-  }, [])
+  }, [hostWithPortString])
 
   return (
     <>

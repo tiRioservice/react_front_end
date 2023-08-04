@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
+import BaseCrud from "./BaseCrud";
+import EndCrud from "../../common/EndCrud";
 import PropTypes from "prop-types";
+const baseCrud = new BaseCrud()
+const endCrud = new EndCrud()
+const options = {
+    method: undefined,
+    headers: undefined,
+    body: undefined
+}
 
-function BaseDetails({hideDetails, setHideDetails, currentBase, jwt, host}){
+function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setBaseRemoved}){
     const [editing, setEditing] = useState(false)
-    const [statusMessage] = useState(undefined)
+    const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
 
     const handleEdit = () => {
@@ -46,12 +55,41 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, jwt, host}){
         })
 
         console.log(data)
-        // updateColab(jwt, data, setStatusMessage)
+        // updateColab(user, data, setStatusMessage)
 
         // setTimeout(() => {
         //     setStatusMessage(undefined)
         //     setEditing(false)
         // }, 3000)
+    }
+
+    const handleRemove = () => {
+        if(currentBase.base_id != null){
+            options['headers'] = {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Cross-Origin-Opener-Policy": "*",
+                "Authorization": "Bearer " + user["x-JWT"],
+                "Host": host
+            }
+
+            options['method'] = "POST"
+
+            const baseRawData = {
+                "base_id": currentBase.base_id
+            }
+            
+            options['body'] = JSON.stringify(baseRawData)
+            baseCrud.removeBase(setStatusMessage, options)
+            if(currentBase.end_id != null){
+                const endRawData = {
+                    "end_id": currentBase.end_id
+                }
+                
+                options['body'] = JSON.stringify(endRawData)
+                endCrud.removeEnd(options)
+            }
+        }
     }
     
     useEffect(() => {
@@ -125,49 +163,62 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, jwt, host}){
             })
         }
     }, [editing])
+
+    useEffect(() => {
+        if(statusMessage != undefined){
+            setTimeout(() => {
+                setHideDetails(true)
+                setStatusMessage(undefined)
+                setBaseRemoved({"base_removed":true})
+            }, 3000)
+        }
+    }, [statusMessage, setHideDetails, setBaseRemoved])
     
     return (
         <div id="base-details" className={!hideDetails ? '' : 'base-details-hidden'}>
             <div className="modal">
-                <header>
-                    <h2>Detalhes da Base</h2>
-                </header>
-                <ul id="attributeList">
-                    <li className="box">
-                        <p className="base-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="base-text base_id">ID: <span className="base_id_value">id</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="base-text base_nome">Nome: <span className="base_nome_value">nome</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="base-text base_desc">Desc: <span className="base_desc_value">desc</span></p>
-                    </li>
-                </ul>
-
-                {(endId !== undefined && endId !== null) 
-                ? (<EnderecoDetails jwt={jwt} host={host} end_id={endId} />) 
-                : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
-
-                <div className="btnOrganizer">
-                    {(!editing) ? (
-                        <button className="btnEdit" onClick={() => handleEdit()}>Editar</button>
-                        ) : (
-                        <button className="btnEditSave" onClick={() => handleEditSave()}>Salvar</button>
-                    )}
-                    <button className="btnCloseModal" onClick={() => {
-                        setHideDetails(true)
-                        setEditing(false)
-                    }}>Fechar</button>
-                </div>
-                
-                {(editing && statusMessage !== undefined) ? (
+                {(statusMessage != undefined) ? (
                     <div className="modal-feedbackMessage success">
                         <p className="feedbackMessage">{statusMessage}</p>
                     </div>
-                ):('')}
+                ):(
+                    <>
+                        <header>
+                            <h2>Detalhes da Base</h2>
+                        </header>
+                        <ul id="attributeList">
+                            <li className="box">
+                                <p className="base-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="base-text base_id">ID: <span className="base_id_value">id</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="base-text base_nome">Nome: <span className="base_nome_value">nome</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="base-text base_desc">Desc: <span className="base_desc_value">desc</span></p>
+                            </li>
+                        </ul>
+
+                        {(endId !== undefined && endId !== null) 
+                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} />) 
+                        : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
+
+                        <div className="btnOrganizer">
+                            <button className="btn btnRemoveBase" onClick={handleRemove}>Remover</button>
+                            {(!editing) ? (
+                                <button className="btn btnEdit" onClick={() => handleEdit()}>Editar</button>
+                                ) : (
+                                <button className="btn btnEditSave" onClick={() => handleEditSave()}>Salvar</button>
+                            )}
+                            <button className="btn btnCloseModal" onClick={() => {
+                                setHideDetails(true)
+                                setEditing(false)
+                            }}>Fechar</button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     )
@@ -177,8 +228,10 @@ BaseDetails.propTypes = {
     hideDetails: PropTypes.bool,
     setHideDetails: PropTypes.func,
     currentBase: PropTypes.object,
-    jwt: PropTypes.string,
-    host: PropTypes.string
+    user: PropTypes.object,
+    host: PropTypes.string,
+    setBaseInserted: PropTypes.func,
+    setBaseRemoved: PropTypes.func
 }
 
 export default BaseDetails;

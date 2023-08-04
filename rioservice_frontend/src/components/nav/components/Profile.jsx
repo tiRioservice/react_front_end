@@ -16,21 +16,21 @@ function Profile({user, host, profileOpen, setProfileOpen, setMenuOpen, trocarSe
                 <div className="data">
                     <h1>Perfil</h1>
                     <p className="user-attributes">ID de usuario: <span>{user.colab_id != null ? user.colab_id : '-'}</span></p>
-                    <p className="user-attributes">Matricula de usuario: <span>{user.colab_matricula != null ? user.colab_matricula : '-'}</span></p>
-                    <p className="user-attributes">Usuario logado: <span>{user.colab_nome != null ? user.colab_nome : '-'}</span></p>
+                    <p className="user-attributes">Matricula: <span>{user.colab_matricula != null ? user.colab_matricula : '-'}</span></p>
+                    <p className="user-attributes">Nome: <span>{user.colab_nome != null ? user.colab_nome : '-'}</span></p>
                     <p className="user-attributes">Data de nasc.: <span>{user.colab_nascimento != null ? user.colab_nascimento : '-'}</span></p>
                     <p className="user-attributes">CPF: <span>{user.colab_cpf != null ? user.colab_cpf : '-'}</span></p>
                     <p className="user-attributes">RG: <span>{user.colab_rg != null ? user.colab_rg : '-'}</span></p>
-                    <p className="user-attributes">Estado civil: <span>{user.colab_est_civil != null ? user.colab_est_civil : '-'}</span></p>
-                    <p className="user-attributes">Naturalidade: <span>{user.colab_naturalidade != null ? user.colab_naturalidade : '-'}</span></p>
                     <p className="user-attributes">Telefone: <span>{user.colab_fone != null ? user.colab_fone : '-'}</span></p>
                     <p className="user-attributes">Celular: <span>{user.colab_celular != null ? user.colab_celular : '-'}</span></p>
+                    <p className="user-attributes">Email: <span>{user.colab_email != null ? user.colab_email : '-'}</span></p>
+                    <p className="user-attributes">Estado civil: <span>{user.colab_est_civil != null ? user.colab_est_civil : '-'}</span></p>
+                    <p className="user-attributes">Naturalidade: <span>{user.colab_naturalidade != null ? user.colab_naturalidade : '-'}</span></p>
                     <p className="user-attributes">Escolaridade: <span>{user.colab_escolaridade != null ? user.colab_escolaridade : '-'}</span></p>
                     <p className="user-attributes">Admissão: <span>{user.colab_admissao != null ? user.colab_admissao : '-'}</span></p>
-                    <p className="user-attributes">Email: <span>{user.colab_email != null ? user.colab_email : '-'}</span></p>
 
                     {(endId !== undefined && endId !== null) 
-                    ? (<EnderecoDetails jwt={user["x-JWT"]} host={host} end_id={endId} />) 
+                    ? (<EnderecoDetails user={user} host={host} end_id={endId} />) 
                     : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
 
                     <div className="organizer">

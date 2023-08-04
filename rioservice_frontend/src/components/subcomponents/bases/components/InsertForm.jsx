@@ -1,24 +1,67 @@
-import {useEffect, useState} from 'react';
-import BaseCrud from './BaseCrud';
+import {useCallback, useEffect, useState, useRef} from 'react';
 import EnderecoForm from '../../common/EnderecoForm';
+import BaseCrud from './BaseCrud';
 import EndCrud from '../../common/EndCrud';
-import PropTypes from 'prop-types';
+import {PropTypes} from 'prop-types';
+const baseCrud = new BaseCrud()
+const endCrud = new EndCrud()
+const options = {
+    method: undefined,
+    headers: undefined,
+    body: undefined
+}
 
-function CommandPanel({user, setInsert, host, setBaseInserted}){
-    const [baseCrud] = useState(new BaseCrud())
-    const [endCrud] = useState(new EndCrud())
+function CommandPanel({user, setInsert, host, setBaseInserted, refresh}){
     const [feedbackMessage, setFeedbackMessage] = useState(undefined)
     const [insertEndReady, setInsertEndReady] = useState(false)
-    const [endereco_inserted, setEndereco_inserted] = useState(false)
-    const [base_inserted, setBase_inserted] = useState(false)
     const [endData, setEndData] = useState(undefined)
     const [baseData, setBaseData] = useState(undefined)
+    const n_bases = useRef(0)
+    const base_inserted = useRef(false)
+    const end_id = useRef(null)
+    const baseData_ref = useRef(null)
 
-    const resetForm = () => {
+    const insertBase_func = useCallback(() => {
+        if(n_bases.current != 1 && base_inserted.current === false){
+            options['headers'] = {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Cross-Origin-Opener-Policy": "*",
+                "Authorization": "Bearer " + user["x-JWT"],
+                "Host": host
+            }
+
+            options['method'] = "POST"
+            const rawData = {
+                "base_nome": baseData_ref.current.base_nome,
+                "base_desc": baseData_ref.current.base_desc,
+                "end_id": baseData_ref.current.end_id
+            }
+
+            options['body'] = JSON.stringify(rawData)
+            baseCrud.insertBase(setFeedbackMessage, base_inserted, options)
+            
+            setTimeout(() => {
+                if(base_inserted.current === true){
+                    n_bases.current = 1
+                }
+            }, 1000)
+        }
+    }, [baseData_ref, base_inserted, user, host])
+
+    const resetForm = useCallback(() =>{
         document.getElementById('nome').value = ''
         document.getElementById('desc').value = ''
-        setBaseData(undefined)
-    }
+        setInsert(false)
+        setEndData(undefined)
+        setFeedbackMessage(undefined)
+
+        setTimeout(() => {
+            setBaseInserted({"base_inserted":false})
+        }, 3000)
+
+        refresh.current = true
+    }, [setInsert, setBaseInserted, setEndData, setFeedbackMessage, refresh])
 
     const handleInsertEnd = () => {
         const insertEnd = document.getElementById('insertEnd')
@@ -40,14 +83,9 @@ function CommandPanel({user, setInsert, host, setBaseInserted}){
                 "end_numero": Number(e.target.elements.numero.value),
                 "end_referencia": e.target.elements.referencia.value !== '' ? e.target.elements.referencia.value : 'N/A'
             })
-
-            setBaseData({
-                "base_nome": e.target.elements.nome.value,
-                "base_desc": e.target.elements.desc.value !== '' ? e.target.elements.desc.value : 'N/A'
-            })
         }
 
-        if(insertEndReady === false && baseData === undefined){
+        if(baseData === undefined){
             setBaseData({
                 "base_nome": e.target.elements.nome.value,
                 "base_desc": e.target.elements.desc.value !== '' ? e.target.elements.desc.value : 'N/A',
@@ -57,42 +95,41 @@ function CommandPanel({user, setInsert, host, setBaseInserted}){
     }
     
     useEffect(() => {
-        if(endData !== undefined){
-            endCrud.insertEnd(endData, setFeedbackMessage, user["x-JWT"], host, setEndereco_inserted)
-        }
-    }, [endData, host, user, endCrud])
-
-    useEffect(() => {
-        if(typeof(baseData) == "object" && typeof(endData) == "object" && endereco_inserted === true){
-            const data = {
-                "end_tipo": endData.end_tipo,
-                "end_cep": endData.end_cep,
-                "end_numero": endData.end_numero
+        if(user !== undefined && host !== undefined && endData !== undefined && end_id.current === null){
+            options['headers'] = {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Cross-Origin-Opener-Policy": "*",
+                "Authorization": "Bearer " + user["x-JWT"],
+                "Host": host
             }
 
-            endCrud.getEndBaseId(data, user["x-JWT"], host, baseData, setBaseData)
+            options['method'] = "POST"
+            options['body'] = JSON.stringify(endData)
+    
+            if(endData !== undefined && options.headers.Host !== undefined){
+                endCrud.insertEnd(setFeedbackMessage, end_id, options)
+            }
         }
-    },[endereco_inserted, endData, user, host, baseData, endCrud])
+    }, [endData, end_id, user, host, setFeedbackMessage])
+
+    useEffect(() => {
+        if(baseData !== undefined && "end_id" in baseData && baseData["end_id"] == null){
+                setTimeout(() => {
+                    baseData_ref.current = {...baseData, "end_id": end_id.current}
+                    insertBase_func()
+                }, 1000)
+        }
+    }, [end_id, baseData, insertBase_func])
     
     useEffect(() => {
-        if(typeof(baseData) == "object") {
-            baseCrud.insertBase(baseData, setFeedbackMessage, user["x-JWT"], host, setBase_inserted)
-        }
-    }, [baseData, user, host, baseCrud])
-    
-    useEffect(() => {
-        if(base_inserted === true){
+        if(feedbackMessage === "Base inserida com sucesso!"){
             setBaseInserted({"base_inserted":true})
             setTimeout(() => {
-                setFeedbackMessage(undefined)
                 resetForm()
-                setInsert(false)
-                setBaseInserted({"base_inserted":false})
-                setEndData(undefined)
-                setEndereco_inserted(false)
             }, 3000)
         }
-    }, [base_inserted, setBaseInserted, setInsert])
+    }, [setBaseInserted, resetForm, feedbackMessage])
 
     return (
         <>
@@ -132,7 +169,8 @@ CommandPanel.propTypes = {
     user: PropTypes.object,
     setInsert: PropTypes.func,
     host: PropTypes.string,
-    setBaseInserted: PropTypes.func
+    setBaseInserted: PropTypes.func,
+    refresh: PropTypes.object
 }
 
 export default CommandPanel;

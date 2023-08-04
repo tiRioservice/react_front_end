@@ -34,27 +34,27 @@ export default function EnderecoForm() {
             </div>
             <div className='inputBox'>
                 <label htmlFor='logradouro'>Logradouro</label>
-                <input type='text' defaultValue='-' name='logradouro' className='readOnlyInput' readOnly/>
+                <input id='logradouro' type='text' defaultValue='-' name='logradouro' className='readOnlyInput' readOnly/>
             </div>
             <div className='inputBox'>
                 <label htmlFor='numero'>Numero</label>
-                <input type='text' defaultValue='' name='numero' maxLength="10" pattern='\d{1,10}' title="O presente campo possui um limite de 10 digitos e aceita somente números."/>
+                <input id='numero' type='text' defaultValue='' name='numero' maxLength="10" pattern='\d{1,10}' title="O presente campo possui um limite de 10 digitos e aceita somente números."/>
             </div>
             <div className='inputBox'>
                 <label htmlFor='bairro'>Bairro</label>
-                <input type='text' defaultValue='-' name='bairro' className='readOnlyInput' readOnly/>
+                <input id='bairro' type='text' defaultValue='-' name='bairro' className='readOnlyInput' readOnly/>
             </div>
             <div className='inputBox'>
                 <label htmlFor='cidade'>Cidade</label>
-                <input type='text' defaultValue='-' name='cidade' className='readOnlyInput' readOnly/>
+                <input id='cidade' type='text' defaultValue='-' name='cidade' className='readOnlyInput' readOnly/>
             </div>
             <div className='inputBox'>
                 <label htmlFor='uf'>UF</label>
-                <input type='text' defaultValue='-' name='uf' className='readOnlyInput' readOnly/>
+                <input id='uf' type='text' defaultValue='-' name='uf' className='readOnlyInput' readOnly/>
             </div>
             <div className='inputBox'>
                 <label htmlFor='referencia'>Referencia</label>
-                <input type='text' defaultValue='' name='referencia' maxLength="300"/>
+                <input id='referencia' type='text' defaultValue='' name='referencia' maxLength="300"/>
             </div>
         </>
     )

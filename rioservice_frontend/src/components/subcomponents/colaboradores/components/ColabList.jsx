@@ -1,25 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import AreaAlert from '../../common/AreaAlert';
+import PropTypes from 'prop-types';
 
-export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
+function ColabList({allColabs, setHideDetails, setCurrentColab, searchTerm, searchConfig}){
     const [fetched, setFetched] = useState(false)
     const [allColabsFetched, setAllColabsFetched] = useState(undefined)
     const [colabs, setColabs] = useState(undefined)
 
-    const fetchColabs = () => {
+    const fetchColabs = useCallback(() => {
         setAllColabsFetched(allColabs)
 
         if (allColabsFetched !== undefined) {
             setFetched(true)
         }
-    }
+    }, [allColabs, allColabsFetched])
 
-    const getColab = (colab) => {
+    const getColab = useCallback((colab) => {
         setCurrentColab(colab)
         setHideDetails(false)
-    }
+    }, [setCurrentColab, setHideDetails])
 
-    const mapColabs = () => {
+    const mapColabs = useCallback(() => {
         setColabs(allColabs.data.map( colab => {
             return (
                 <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id} onClick={() => {getColab(colab)}}>
@@ -38,7 +39,60 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
                 </tr>
             )
         }))
-    }
+    }, [allColabs, getColab])
+
+    const filterColabs = useCallback(() => {
+        if(searchTerm !== undefined){
+            if(searchTerm !== ""){
+                if(searchConfig === "matricula"){
+                    console.log("matricula")
+                    setColabs(allColabs.data.filter(colab => {
+                        return colab.colab_matricula.toString().includes(searchTerm.toString());
+                    }).map( colab => {
+                        return (
+                            <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id} onClick={() => {getColab(colab)}}>
+                                <td>
+                                    {colab.colab_id}
+                                </td>
+                                <td>
+                                    {colab.colab_matricula == 0 ? 'N/A' : colab.colab_matricula}
+                                </td>
+                                <td>
+                                    {colab.colab_nome}
+                                </td>
+                                <td>
+                                    {colab.colab_cpf}
+                                </td>
+                            </tr>
+                        )
+                    }))
+                } else {
+                    setColabs(allColabs.data.filter(colab => {
+                        return colab[`colab_${searchConfig}`].toLowerCase().includes(searchTerm.toLowerCase())
+                    }).map( colab => {
+                        return (
+                            <tr className={`colab colab-${colab.colab_id}`} key={colab.colab_id} onClick={() => {getColab(colab)}}>
+                                <td>
+                                    {colab.colab_id}
+                                </td>
+                                <td>
+                                    {colab.colab_matricula == 0 ? 'N/A' : colab.colab_matricula}
+                                </td>
+                                <td>
+                                    {colab.colab_nome}
+                                </td>
+                                <td>
+                                    {colab.colab_cpf}
+                                </td>
+                            </tr>
+                        )
+                    }))
+                }
+            } else {
+                mapColabs()
+            }
+        }
+    }, [allColabs, searchTerm, getColab, mapColabs, searchConfig])
 
 
     useEffect(() => {
@@ -46,12 +100,16 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
             if(!fetched){
                 if(!allColabs.msg){
                     allColabsFetched == undefined && fetchColabs();
-                    mapColabs();
+                    filterColabs();
                 }
             }
         }
 
-    }, [allColabs, allColabsFetched])
+    }, [allColabs, allColabsFetched, fetchColabs, fetched, filterColabs])
+
+    useEffect(() => {
+        console.log("colabList: ", searchTerm)
+    }, [searchTerm])
 
     return (
         <>
@@ -75,3 +133,13 @@ export default function ColabList({allColabs, setHideDetails, setCurrentColab}){
         </>
     )
 }
+
+ColabList.propTypes = {
+    allColabs: PropTypes.object,
+    setHideDetails: PropTypes.func,
+    setCurrentColab: PropTypes.func,
+    searchTerm: PropTypes.string,
+    searchConfig: PropTypes.string
+}
+
+export default ColabList;

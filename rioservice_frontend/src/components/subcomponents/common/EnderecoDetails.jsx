@@ -1,14 +1,31 @@
 import {useEffect, useState} from 'react';
 import EndCrud from './EndCrud';
 import PropTypes from 'prop-types';
+const crud = new EndCrud();
+const options = {
+    method: undefined,
+    headers: undefined,
+    body: undefined
+}
 
-function EnderecoDetails({end_id, jwt, host}){
+function EnderecoDetails({end_id, user, host}){
     const [end, setEnd] = useState(undefined)
-
+    
     useEffect(() => {
-        const crud = new EndCrud();
-        crud.getEndData({"end_id": end_id}, jwt, host, setEnd)
-    }, [end_id, jwt, host])
+        if(end_id != undefined && user != undefined && host != undefined){
+            options.method = "POST"
+            options.body = JSON.stringify({"end_id":end_id})
+            options['headers'] = {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Cross-Origin-Opener-Policy": "*",
+                "Authorization": "Bearer " + user["x-JWT"],
+                "Host": host
+            }
+            
+            crud.getEndData(setEnd, options)
+        }
+    }, [end_id, user, host])
 
     return (
         <div className="endDetails">
@@ -61,7 +78,7 @@ function EnderecoDetails({end_id, jwt, host}){
 
 EnderecoDetails.propTypes = {
     end_id: PropTypes.number,
-    jwt: PropTypes.string,
+    user: PropTypes.object,
     host: PropTypes.string
 }
 

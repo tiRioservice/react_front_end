@@ -223,6 +223,20 @@
                 margin: 8px;
             }
 
+            button.btn{
+                @extend %button;
+            }
+
+            button.btnRemoveBase{
+                @extend %button;
+    
+                &:hover{
+                    background-color: $color_red_bg;
+                    border-color: $color_cinnabar;
+                    color: white;
+                }
+            }
+
             button.btnCloseModal{
                 @extend %button;
                 background-color: $color_one;
@@ -319,7 +333,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 200px;
         padding: 8px;
         height: 100%;
 
@@ -327,6 +340,7 @@
             @extend %button;
             background-color: $color_one;
             color: white;
+            margin: 8px;
 
             &:hover{
                 background-color: transparent;

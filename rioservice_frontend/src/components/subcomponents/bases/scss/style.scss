@@ -9,6 +9,52 @@ section#bases{
         @extend %panel;
     }
 
+    div#base-search{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4px;
+        width: inherit;
+
+        fieldset{
+            width: inherit;
+            legend{
+                width: 100%;
+                text-align: center;
+            }
+
+            div.setOrganizer{
+                display: flex;
+                justify-content: center;
+                width: 100%;
+
+                div.option{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 4px;
+                    border: solid 1px $color_one;
+                    padding: 4px;
+                    border-radius: 4px;
+                    background-color: $color_one;
+                    color: white;
+
+                    input.base-search-config{
+                        margin: 0 4px;
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+            }
+        }
+
+        input{
+            @extend %basic-input;
+            max-width: none;
+        }
+    }
+
     div#base-list{
         margin: 0 8px;
         border-radius: 4px;border: solid 1px $color_one;

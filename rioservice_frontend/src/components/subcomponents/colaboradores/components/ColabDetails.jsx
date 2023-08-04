@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
+import ColabCrud from "./ColabCrud";
+import EndCrud from "../../common/EndCrud";
 import PropTypes from "prop-types";
+const colabCrud = new ColabCrud()
+const endCrud = new EndCrud()
+const options = {
+    method: undefined,
+    headers: undefined,
+    body: undefined
+}
 
-function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
+function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, setColabRemoved}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
@@ -12,7 +21,6 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
     }
 
     const handleEditSave = () => {
-        console.log(jwt, host)
         setStatusMessage('Salvando alterações...')
         const colabFields = document.querySelectorAll('.colab-text')
         const data = {
@@ -55,6 +63,35 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
         //     setStatusMessage(undefined)
         //     setEditing(false)
         // }, 3000)
+    }
+
+    const handleRemove = () => {
+        if(currentColab.colab_id != null){
+            options['headers'] = {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Cross-Origin-Opener-Policy": "*",
+                "Authorization": "Bearer " + user["x-JWT"],
+                "Host": host
+            }
+
+            options['method'] = "POST"
+
+            const colabRawData = {
+                "colab_id": currentColab.colab_id
+            }
+            
+            options['body'] = JSON.stringify(colabRawData)
+            colabCrud.removeColab(setStatusMessage, options)
+            if(currentColab.end_id != null){
+                const endRawData = {
+                    "end_id": currentColab.end_id
+                }
+                
+                options['body'] = JSON.stringify(endRawData)
+                endCrud.removeEnd(options)
+            }
+        }
     }
     
     useEffect(() => {
@@ -140,85 +177,101 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, jwt, host}){
             })
         }
     }, [editing])
+
+    useEffect(() => {
+        if(statusMessage != undefined){
+            setTimeout(() => {
+                setHideDetails(true)
+                setStatusMessage(undefined)
+                setColabRemoved({"colab_removed":true})
+            }, 3000)
+        }
+    }, [statusMessage, setHideDetails, setColabRemoved])
     
     return (
         <div id="colab-details" className={!hideDetails ? '' : 'colab-details-hidden'}>
             <div className="modal">
-                <header>
-                    <h2>Detalhes do Colaborador</h2>
-                </header>
-                <ul id="attributeList">
-                    <li className="box">
-                        <p className="colab-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_id">ID: <span className="colab_id_value">####</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_matricula">Matricula: <span className="colab_matricula_value">####</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_nome">Nome: <span className="colab_nome_value">Nome do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_nascimento">Data de nascimento: <span className="colab_nascimento_value">Data de nascimento do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_cpf">CPF: <span className="colab_cpf_value">CPF do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_rg">RG: <span className="colab_rg_value">RG do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_est_civil">Estado civil: <span className="colab_est_civil_value">Estado civil do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_naturalidade">Naturalidade: <span className="colab_naturalidade_value">Naturalidade do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_fone">Telefone (res): <span className="colab_fone_value">Telefone do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_celular">Celular: <span className="colab_celular_value">Celular do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_escolaridade">Escolaridade: <span className="colab_escolaridade_value">Escolaridade do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_admissao">Admissão: <span className="colab_admissao_value">Admissão do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_email">Email: <span className="colab_email_value">Email do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_centro_custo">Centro de custo: <span className="colab_centro_custo_value">Centro de custo do colaborador</span></p>
-                    </li>
-                    <li className="box">
-                        <p className="colab-text colab_status">Status: <span className="colab_status_value">Status do colaborador</span></p>
-                    </li>
-                </ul>
-
-                {(endId !== undefined && endId !== null) 
-                ? (<EnderecoDetails jwt={jwt} host={host} end_id={endId} />) 
-                : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
-
-                <div className="btnOrganizer">
-                    {(!editing) ? (
-                        <button className="btnEdit" onClick={() => handleEdit()}>Editar</button>
-                        ) : (
-                        <button className="btnEditSave" onClick={() => handleEditSave()}>Salvar</button>
-                    )}
-                    <button className="btnCloseModal" onClick={() => {
-                        setHideDetails(true)
-                        setEditing(false)
-                    }}>Fechar</button>
-                </div>
-                
-                {(editing && statusMessage !== undefined) ? (
+                {(statusMessage !== undefined) ? (
                     <div className="modal-feedbackMessage success">
                         <p className="feedbackMessage">{statusMessage}</p>
                     </div>
-                ):('')}
+                ):( 
+                    <>
+                        <header>
+                            <h2>Detalhes do Colaborador</h2>
+                        </header>
+                        <ul id="attributeList">
+                            <li className="box">
+                                <p className="colab-text registro">Registro: <span className="registro_value">xx/xx/xxxx</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_id">ID: <span className="colab_id_value">####</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_matricula">Matricula: <span className="colab_matricula_value">####</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_nome">Nome: <span className="colab_nome_value">Nome do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_nascimento">Data de nascimento: <span className="colab_nascimento_value">Data de nascimento do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_cpf">CPF: <span className="colab_cpf_value">CPF do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_rg">RG: <span className="colab_rg_value">RG do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_est_civil">Estado civil: <span className="colab_est_civil_value">Estado civil do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_naturalidade">Naturalidade: <span className="colab_naturalidade_value">Naturalidade do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_fone">Telefone (res): <span className="colab_fone_value">Telefone do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_celular">Celular: <span className="colab_celular_value">Celular do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_escolaridade">Escolaridade: <span className="colab_escolaridade_value">Escolaridade do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_admissao">Admissão: <span className="colab_admissao_value">Admissão do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_email">Email: <span className="colab_email_value">Email do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_centro_custo">Centro de custo: <span className="colab_centro_custo_value">Centro de custo do colaborador</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text colab_status">Status: <span className="colab_status_value">Status do colaborador</span></p>
+                            </li>
+                        </ul>
+
+                        {(endId !== undefined && endId !== null) 
+                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} />) 
+                        : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
+
+                        <div className="btnOrganizer">
+                            <button className="btn btnRemoveBase" onClick={handleRemove}>Remover</button>
+                            {(!editing) ? (
+                                <button className="btnEdit" onClick={() => handleEdit()}>Editar</button>
+                                ) : (
+                                <button className="btnEditSave" onClick={() => handleEditSave()}>Salvar</button>
+                            )}
+                            <button className="btnCloseModal" onClick={() => {
+                                setHideDetails(true)
+                                setEditing(false)
+                            }}>Fechar</button>
+                        </div>
+                    </>
+                )}
+
+                
+
             </div>
         </div>
     )
@@ -228,8 +281,9 @@ ColabDetails.propTypes = {
     hideDetails: PropTypes.bool,
     setHideDetails: PropTypes.func,
     currentColab: PropTypes.object,
-    jwt: PropTypes.string,
-    host: PropTypes.string
+    user: PropTypes.object,
+    host: PropTypes.string,
+    setColabRemoved: PropTypes.func
 }
 
 export default ColabDetails;
