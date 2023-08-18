@@ -2,7 +2,7 @@ export async function InsertBase(setFeedbackMessage, base_inserted, options) {
     await fetch(`http://${options.headers["Host"]}/app/v2/bases/inserir`, options)
     .then(res => res.json())
     .then(data => {
-        setFeedbackMessage(data.msg)
+        setFeedbackMessage(data.action)
         base_inserted.current = data.base_inserted
     })
 }
@@ -23,11 +23,11 @@ export async function GetBaseData(setBase, options) {
     })
 }
 
-export async function UpdateBase(data, setStatusMessage, options){
+export async function UpdateBase(setStatusMessage, options){
     await fetch(`http://${options.headers['Host']}/app/v2/bases/atualizar`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.msg)
+        setStatusMessage(data.action)
     })
 }
 
@@ -35,7 +35,7 @@ export async function RemoveBase(setStatusMessage, options){
     await fetch(`http://${options.headers['Host']}/app/v2/bases/remover`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.msg)
+        setStatusMessage(data.action)
     })
 }
 

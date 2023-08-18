@@ -17,6 +17,19 @@ section#loginScreen{
             color: $color_two;
             font-size: 12px;
         }
+
+        div.feedbackMessageContainer{
+            margin: 8px 0;
+            p.feedbackMessage{
+                text-align: center;
+                color: $color_cinnabar;
+                font-size: 12px;
+                background-color: $color_red_bg;
+                padding: 8px;
+                font-family: sans-serif;
+                font-weight: bold;
+            }
+        }
     }
 
 }

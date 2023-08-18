@@ -6,7 +6,6 @@ import ColabList from './components/ColabList';
 import ColabCrud from './components/ColabCrud';
 import ColabDetails from './components/ColabDetails';
 import ColabSearch from './components/ColabSearch';
-import AreaAlert from '../common/AreaAlert';
 import { PropTypes } from 'prop-types';
 const options = {
     method: undefined,
@@ -22,7 +21,6 @@ function Colaboradores({user, host}){
     const [currentColab, setCurrentColab] = useState(undefined)
     const [colabInserted, setColabInserted] = useState(undefined)
     const [colabRemoved, setColabRemoved] = useState(undefined)
-    const [hasColabs, setHasColabs] = useState(true)
     const refresh = useRef(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("CPF")
@@ -62,15 +60,13 @@ function Colaboradores({user, host}){
     return (
         <>
             <section id="colaboradores">
-                {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch}/>) : ("")) : ("")}
+                {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch} allColabs={(allColabs != undefined)?(allColabs):({})}/>) : ("")) : ("")}
 
                 {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setColabInserted={setColabInserted} refresh={refresh}/>) : ("")}
                 
                 {(search) ? (<ColabSearch setSearchTerm={setSearchTerm} setSearchConfig={setSearchConfig} searchConfig={searchConfig}/>) : ("")}
                 
-                {hasColabs ?
-                (<ColabList setHasColabs={setHasColabs} allColabs={allColabs} setHideDetails={setHideDetails} setCurrentColab={setCurrentColab} searchTerm={searchTerm} searchConfig={searchConfig}/>)
-                : (<AreaAlert frase="Não há colaboradores cadastrados"/>)}
+                <ColabList allColabs={allColabs} setHideDetails={setHideDetails} setCurrentColab={setCurrentColab} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 
                 <ColabDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentColab={currentColab} user={user} setColabRemoved={setColabRemoved}/>
             </section>

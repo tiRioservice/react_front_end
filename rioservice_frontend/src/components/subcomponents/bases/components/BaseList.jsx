@@ -69,9 +69,6 @@ function BaseList({allBases, setHideDetails, setCurrentBase, searchTerm, searchC
                                     {base.base_id}
                                 </td>
                                 <td>
-                                    {base.base_matricula == 0 ? 'N/A' : base.base_matricula}
-                                </td>
-                                <td>
                                     {base.base_nome}
                                 </td>
                                 <td>
@@ -106,9 +103,9 @@ function BaseList({allBases, setHideDetails, setCurrentBase, searchTerm, searchC
                 <table>
                     <thead>
                         <tr>
-                            <td>id</td>
-                            <td>nome</td>
-                            <td>desc</td>
+                            <td>ID</td>
+                            <td>Nome</td>
+                            <td>Desc</td>
                         </tr>
                     </thead>
                     <tbody>

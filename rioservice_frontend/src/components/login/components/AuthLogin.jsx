@@ -1,4 +1,4 @@
-export default function authLogin(e, login, password, setLoggedIn, setUser, host) {
+export default function authLogin(e, login, password, setLoggedIn, setUser, host, setFeedbackMessage) {
     e.preventDefault()
 
     const data = {
@@ -42,7 +42,11 @@ export default function authLogin(e, login, password, setLoggedIn, setUser, host
             "x-JWT": data["x-JWT"],
         }
 
-        setUser(user)
-        setLoggedIn(status)
+        if(data.Erro){
+            setFeedbackMessage(data.Erro)
+        } else {
+            setUser(user)
+            setLoggedIn(status)
+        }
     })
 }

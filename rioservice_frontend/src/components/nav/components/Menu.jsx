@@ -1,6 +1,8 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
-function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocarSenhaOpen}) {
+
+function Menu({userCargoConfig, menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocarSenhaOpen}) {
+
     return (
         <>
             <div id="menu" className={!menuOpen ? "menu-fechado" : "menu-aberto"}>
@@ -13,25 +15,9 @@ function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocar
                             Dashboard
                         </button>
                     </li>
-
-                    <li>
-                        <button onClick={() => {
-                            setMenuOpen(false)
-                            setPage("Colaboradores")
-                        }}>
-                            Colaboradores
-                        </button>
-                    </li>
-
-                    <li>
-                        <button onClick={() => {
-                            setMenuOpen(false)
-                            setPage("Cargos")
-                        }}>
-                            Cargos
-                        </button>
-                    </li>
-
+                
+                {(userCargoConfig != undefined && userCargoConfig.data[0]["perm_id"] == 1 && userCargoConfig.data[0]["nvl_acesso"] == true) 
+                ? (
                     <li>
                         <button onClick={() => {
                             setMenuOpen(false)
@@ -40,6 +26,34 @@ function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocar
                             Bases
                         </button>
                     </li>
+                    ) : (<></>)}
+
+                {(userCargoConfig !== undefined && userCargoConfig.data[1]["perm_id"] === 2 && userCargoConfig.data[1]["nvl_acesso"] === true) 
+                ? (
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Colaboradores")
+                        }}>
+                            Colaboradores
+                        </button>
+                    </li>
+                    ) : (<></>)}
+
+                {(userCargoConfig !== undefined && userCargoConfig.data[2]["perm_id"] === 3 && userCargoConfig.data[2]["nvl_acesso"] === true) 
+                ? (
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Cargos")
+                        }}>
+                            Cargos
+                        </button>
+                    </li>
+                    ) : (<></>)}
+
+                
+
                     --- x ---
                     <li>
                         <button className="profile" onClick={() => {
@@ -67,6 +81,7 @@ function Menu({menuOpen, setMenuOpen, setPage, logOut, setProfileOpen, setTrocar
 }
 
 Menu.propTypes = {
+    userCargoConfig: PropTypes.object,
     menuOpen: PropTypes.bool.isRequired,
     setMenuOpen: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,

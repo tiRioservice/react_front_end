@@ -27,42 +27,57 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
             "colab_id": undefined,
             "colab_matricula": undefined,
             "colab_nome": undefined,
-            // "colab_nascimento": undefined,
+            "colab_nascimento": undefined,
             "colab_cpf": undefined,
-            // "colab_rg": undefined,
+            "colab_rg": undefined,
             "colab_est_civil": undefined,
-            // "colab_naturalidade": undefined,
-            // "colab_fone": undefined,
-            // "colab_celular": undefined,
-            // "colab_escolaridade": undefined,
-            // "colab_admissao": undefined,
-            // "colab_email": undefined,
-            // "colab_centro_custo": undefined,
-            // "colab_salario": undefined,
-            // "colab_status": undefined,
-            "colab_login": undefined
+            "colab_naturalidade": undefined,
+            "colab_fone": undefined,
+            "colab_celular": undefined,
+            "colab_escolaridade": undefined,
+            "colab_admissao": undefined,
+            "colab_email": undefined,
+            "colab_centro_custo": undefined,
+            "colab_status": undefined
         }
 
         colabFields.forEach( field => {
-            console.log(field);
             const firstChild = field.children[0]
-            if(firstChild.nodeName !== 'SPAN'){
+            if(firstChild.nodeName === 'SPAN'){
+                if(!isNaN(firstChild.innerText)){
+                    data[field.classList[1]] = Number(firstChild.innerText)
+                }
+                return
+            } else {
                 if(firstChild.value){
-                    data[field.classList[1]] = firstChild.value
+                    data[field.classList[1]] 
+                    = (!isNaN(firstChild.value) && firstChild.value !== '') 
+                    ? Number(firstChild.value) 
+                    : (firstChild.value)
                     return
                 }
             }
 
-            data[field.classList[1]] = firstChild.innerText
+
+            data[field.classList[1]] = firstChild.innerText != '' ? firstChild.innerText : null
         })
 
-        console.log(data)
-        // updateColab(jwt, data, setStatusMessage)
+        options['headers'] = {
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + user["x-JWT"],
+            "Host": host
+        }
 
-        // setTimeout(() => {
-        //     setStatusMessage(undefined)
-        //     setEditing(false)
-        // }, 3000)
+        options['method'] = "POST"
+        options['body'] = JSON.stringify(data)
+        colabCrud.updateColab(setStatusMessage, options)
+
+        setTimeout(() => {
+            setStatusMessage(undefined)
+            setEditing(false)
+        }, 3000)
     }
 
     const handleRemove = () => {
@@ -95,7 +110,7 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
     }
     
     useEffect(() => {
-        if(currentColab != undefined && !editing){
+        if(currentColab != undefined && editing === false){
             const date = currentColab.registro
             const splited = date.split(' ')
             const dia = splited[1]
@@ -110,12 +125,58 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                 if(field.classList[1] != 'registro'){
                     if(field.classList[1] === 'colab_est_civil'){
                         capitalizedField = 'Estado civil'
+                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
+                    } if(field.classList[1] === 'colab_fone'){
+                        capitalizedField = 'Telefone(fixo)'
+                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
                     } else if(field.classList[1] === 'colab_centro_custo'){
                         capitalizedField = 'Centro de custo'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
                     } else if(field.classList[1] === 'colab_status'){ 
                         capitalizedField = 'Status'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == 0)?('INATIVO'):('ATIVO')}</span>`
+                    } else if(field.classList[1] === 'colab_admissao'){ 
+                        capitalizedField = 'Admissao'
+                        const fullDate = currentColab[field.classList[1]]
+                        let formattedDate = undefined
+                        if(fullDate != null){
+                            const dataFromDate = fullDate.split(' ')
+                            const [diaDaSem, data, mes, ano, horario, fuso] = dataFromDate
+                            const meses = {
+                                'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                            }
+    
+                            const unused = [diaDaSem, horario, fuso]
+                            
+                            for (const [key, value] of Object.entries(meses)) {
+                                if(String(mes) == key){
+                                    formattedDate = `${ano}-${value}-${data}`
+                                }
+                            }
+                        }
+
+                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('-'):(formattedDate)}</span>`
+                    } else if(field.classList[1] === 'colab_nascimento'){ 
+                        capitalizedField = 'Nascimento'
+                        const fullDate = currentColab[field.classList[1]]
+                        let formattedDate = undefined
+                        if(fullDate != null){
+                            const dataFromDate = fullDate.split(' ')
+                            const [diaDaSem, data, mes, ano, horario, fuso] = dataFromDate
+                            const meses = {
+                                'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                            }
+    
+                            const unused = [diaDaSem, horario, fuso]
+                            
+                            for (const [key, value] of Object.entries(meses)) {
+                                if(String(mes) == key){
+                                    formattedDate = `${ano}-${value}-${data}`
+                                }
+                            }
+                        }
+
+                        field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('-'):(formattedDate)}</span>`
                     } else {
                         capitalizedField = field.classList[1].split('_')[1].charAt(0).toUpperCase() + field.classList[1].split('_')[1].slice(1)
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
@@ -150,7 +211,6 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                     input.setAttribute('class', 'colab-input')
 
                     const attribute = span.innerText !== 'Não definido' ? span.innerHTML : ''
-                    console.log(attribute)
                     input.setAttribute('value', attribute)
 
                     if(field.classList[1] === 'colab_est_civil'){
@@ -166,6 +226,49 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                         })
                     } else if(field.classList[1] === 'colab_centro_custo'){
                         field.innerHTML = 'Centro de custo'
+                    } else if(field.classList[1] === 'colab_fone'){
+                        field.innerHTML = 'Telefone(fixo)'
+                    } else if(field.classList[1] === 'colab_email'){
+                        field.innerHTML = 'Email'
+                        input.type = 'email'
+                    } else if(field.classList[1] === 'colab_escolaridade'){
+                        field.innerHTML = 'Escolaridade'
+                        input = document.createElement('select')
+                        input.setAttribute('class', 'colab-input')
+                        const options = ['Ensino Fundamental Incompleto', 'Ensino Fundamental Completo', 'Ensino Médio Incompleto', 'Ensino Médio Completo', 'Ensino Técnico', 'Ensino Superior Incompleto', 'Ensino Superior Completo', 'Pós-Graduação', 'Mestrado']
+                        options.forEach( option => {
+                            const optionElement = document.createElement('option')
+                            optionElement.setAttribute('value', option)
+                            optionElement.innerHTML = option
+                            input.appendChild(optionElement)
+                        })
+                    } else if(field.classList[1] === 'colab_status'){
+                        let status_code = field.innerText.split(': ')[1] === 'ATIVO' ? 1 : 0
+                        field.innerHTML = 'Status'
+                        input = document.createElement('select')
+                        input.setAttribute('class', 'colab-input')
+                        const options = ['INATIVO', 'ATIVO']
+                        options.forEach( (option, index) => {
+                            const optionElement = document.createElement('option')
+                            optionElement.setAttribute('value', index)
+                            optionElement.innerHTML = option
+                            optionElement.selected = (index === status_code) ? true : false
+                            input.appendChild(optionElement)
+                        })
+                    } else if(field.classList[1] === 'colab_admissao'){
+                        let dateValue = span.innerText !== '-' ? span.innerHTML : '-'
+                        input = document.createElement('input')
+                        input.setAttribute('class', 'colab-input')
+                        input.setAttribute('type', 'date')
+                        input.value = dateValue
+                        field.innerHTML = 'Admissao'
+                    } else if(field.classList[1] === 'colab_nascimento'){
+                        let dateValue = span.innerText !== '-' ? span.innerHTML : '-'
+                        input = document.createElement('input')
+                        input.setAttribute('class', 'colab-input')
+                        input.setAttribute('type', 'date')
+                        input.value = dateValue
+                        field.innerHTML = 'Nascimento'
                     } else {
                         field.innerHTML = capitalizedField
                     }
@@ -256,7 +359,7 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                         : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
 
                         <div className="btnOrganizer">
-                            <button className="btn btnRemoveBase" onClick={handleRemove}>Remover</button>
+                            {(!editing) ? (<button className="btn btnRemoveBase" onClick={handleRemove}>Remover</button>) : (<></>)}
                             {(!editing) ? (
                                 <button className="btnEdit" onClick={() => handleEdit()}>Editar</button>
                                 ) : (

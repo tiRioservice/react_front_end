@@ -2,7 +2,7 @@ export async function InsertColab(setFeedbackMessage, colab_inserted, options) {
     await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/inserir`, options)
     .then(res => res.json())
     .then(data => {
-        setFeedbackMessage(data.msg)
+        setFeedbackMessage(data.action)
         colab_inserted.current = data.colab_inserted
     })
 }
@@ -24,19 +24,10 @@ export async function GetColabData(setColab, options) {
 }
 
 export async function UpdateColab(setStatusMessage, options){
-
-    // const colab_data = {
-    //     "colab_id": data.colab_id,
-    //     "colab_matricula": data.colab_matricula,
-    //     "colab_nome": data.colab_nome,
-    //     "colab_cpf": data.colab_cpf,
-    //     "colab_login": data.colab_login
-    // }
-
     await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/atualizar`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.msg)
+        setStatusMessage(data.action)
     })
 }
 
@@ -44,7 +35,7 @@ export async function RemoveColab(setStatusMessage, options){
     await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/remover`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.msg)
+        setStatusMessage(data.action)
     })
 }
 

@@ -6,7 +6,7 @@ import logo from '../../assets/rioservice_logo.webp';
 import PropTypes from "prop-types";
 import './scss/style.scss';
 
-function Nav({user, host, logOut, setPage}) {
+function Nav({user, host, logOut, setPage, userCargoConfig}) {
     const [trocarSenhaOpen, setTrocarSenhaOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const [profileOpen, setProfileOpen] = useState(false)
@@ -20,7 +20,7 @@ function Nav({user, host, logOut, setPage}) {
                     </li>
                     <li><MenuHamburguer menuOpen={menuOpen} setMenuOpen={setMenuOpen}/></li>
                 </ul>
-                <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} setPage={setPage} logOut={logOut} user={user} setProfileOpen={setProfileOpen} setTrocarSenhaOpen={setTrocarSenhaOpen}/>
+                <Menu userCargoConfig={userCargoConfig} menuOpen={menuOpen} setMenuOpen={setMenuOpen} setPage={setPage} logOut={logOut} setProfileOpen={setProfileOpen} setTrocarSenhaOpen={setTrocarSenhaOpen}/>
                 <Profile user={user} host={host} profileOpen={profileOpen} setProfileOpen={setProfileOpen} setMenuOpen={setMenuOpen} trocarSenhaOpen={trocarSenhaOpen} setTrocarSenhaOpen={setTrocarSenhaOpen}/>
             </nav>
         </>
@@ -31,7 +31,8 @@ Nav.propTypes = {
     user: PropTypes.object.isRequired,
     host: PropTypes.string.isRequired,
     logOut: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired
+    setPage: PropTypes.func.isRequired,
+    userCargoConfig: PropTypes.object
 }
 
 export default Nav

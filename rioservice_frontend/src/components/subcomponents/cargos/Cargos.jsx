@@ -1,36 +1,91 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import './scss/style.scss';
 import CommandPanel from './components/CommandPanel';
 import InsertForm from './components/InsertForm';
 import CargoList from './components/CargoList';
 import CargoCrud from './components/CargoCrud';
 import CargoDetails from './components/CargoDetails';
+import CargoSearch from './components/CargoSearch';
+import { PropTypes } from 'prop-types';
+const options = {
+    method: undefined,
+    headers: undefined,
+    body: undefined
+}
 
-export default function Cargos({user, host}){
+function Cargos({user, host, fetchConfigs}){
     const [insert, setInsert] = useState(false)
+    const [search, setSearch] = useState(false)
     const [allCargos, setAllCargos] = useState(undefined)
     const [hideDetails, setHideDetails] = useState(true)
     const [currentCargo, setCurrentCargo] = useState(undefined)
+    const [currentCargoConfigs, setCurrentCargoConfigs] = useState(undefined)
+    const [cargoInserted, setCargoInserted] = useState(undefined)
+    const [cargoRemoved, setCargoRemoved] = useState(undefined)
+    const refresh = useRef(false)
+    const [searchTerm, setSearchTerm] = useState("")
+    const [searchConfig, setSearchConfig] = useState("nome")
 
-    useEffect(() => {
-        const crud = new CargoCrud();
-        const jwt = user["x-JWT"]
-        crud.getCargoList(jwt, setAllCargos, host)
-    }, [])
-
-    useEffect(() => {
-        if(currentCargo !== undefined){
-            setHideDetails(false)
+    const fetchList = useCallback(() => {
+        const cargoCrud = new CargoCrud();
+        options['headers'] = {
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + user["x-JWT"],
+            "Host": host
         }
-    }, [currentCargo])
+
+        cargoCrud.getCargoList(setAllCargos, options)
+        refresh.current = false
+    },[user, host, refresh])
+
+    useEffect(() => {
+        setCargoInserted({"cargo_inserted":false})
+        setCargoRemoved({"cargo_removed":false})
+        refresh.current = true
+        fetchList()
+    }, [fetchList])
+
+    useEffect(() => {
+        if(cargoInserted !== undefined && "cargo_inserted" in cargoInserted) {
+            if(cargoInserted.cargo_inserted == true){
+                setCargoInserted({"cargo_inserted":false})
+                fetchList()
+            }
+        }
+    }, [cargoInserted, host, user, fetchList])
+
+    useEffect(() => {
+        if(cargoRemoved != undefined && "cargo_removed" in cargoRemoved) {
+            if(cargoRemoved.cargo_removed == true){
+                setCargoRemoved({"cargo_removed":false})
+                fetchList()
+            }
+        }
+    }, [cargoRemoved, fetchList])
 
     return (
         <>
             <section id="cargos">
-                {(!insert) ? (<CommandPanel setInsert={setInsert}/>) : (<InsertForm host={host} user={user} setInsert={setInsert}/>)}
-                <CargoList allCargos={allCargos} setHideDetails={setHideDetails} setCurrentCargo={setCurrentCargo}/>
-                <CargoDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentCargo={currentCargo} jwt={user["x-JWT"]} />
+                {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch} allCargos={(allCargos != undefined)?(allCargos):({})}/>):(<></>)) : (<></>)}
+
+                {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setCargoInserted={setCargoInserted} cargoInserted={cargoInserted} refresh={refresh}/>) : (<></>)}
+
+                {(search) ? (<CargoSearch setSearchTerm={setSearchTerm} setSearchConfig={setSearchConfig} searchConfig={searchConfig}/>) : (<></>)}
+
+                <CargoList host={host} user={user} allCargos={allCargos} setHideDetails={setHideDetails} setCurrentCargo={setCurrentCargo} searchTerm={searchTerm} searchConfig={searchConfig} setCurrentCargoConfigs={setCurrentCargoConfigs}/>
+                
+                <CargoDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentCargo={currentCargo} user={user} setCargoRemoved={setCargoRemoved} currentCargoConfigs={currentCargoConfigs} fetchConfigs={fetchConfigs} fetchList={fetchList}/>
             </section>
         </>
     )
 }
+
+Cargos.propTypes = {
+    user: PropTypes.object.isRequired,
+    host: PropTypes.string.isRequired,
+    fetchConfigs: PropTypes.func
+}
+
+export default Cargos;

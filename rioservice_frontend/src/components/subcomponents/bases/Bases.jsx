@@ -60,11 +60,11 @@ function Bases({user, host}){
     return (
         <>
             <section id="bases">
-                {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch}/>) : ("")) : ("")}
+                {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch} allBases={(allBases != undefined)?(allBases):({})}/>) : (<></>)) : (<></>)}
 
-                {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setBaseInserted={setBaseInserted} refresh={refresh}/>) : ("")}
+                {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setBaseInserted={setBaseInserted} refresh={refresh}/>) : (<></>)}
 
-                {(search) ? (<BaseSearch setSearchTerm={setSearchTerm} setSearchConfig={setSearchConfig} searchConfig={searchConfig}/>) : ("")}
+                {(search) ? (<BaseSearch setSearchTerm={setSearchTerm} setSearchConfig={setSearchConfig} searchConfig={searchConfig}/>) : (<></>)}
                 
                 <BaseList allBases={allBases} setHideDetails={setHideDetails} setCurrentBase={setCurrentBase} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 

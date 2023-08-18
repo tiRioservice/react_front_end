@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 
-function CommandPanel({setInsert, setSearch}){
+function CommandPanel({setInsert, setSearch, allColabs}){
     return (
         <>
             <div id="command-panel">
                 <div className='panel'>
-                    <button onClick={() => setSearch(true)}>Buscar colaborador</button>
+                    {(allColabs.data)
+                    ? (<button onClick={() => setSearch(true)}>Buscar colaborador</button>)
+                    : (<></>)}
                     <button onClick={() => setInsert(true)}>Inserir colaborador</button>
                 </div>
             </div>
@@ -15,7 +17,8 @@ function CommandPanel({setInsert, setSearch}){
 
 CommandPanel.propTypes = {
     setInsert: PropTypes.func.isRequired,
-    setSearch: PropTypes.func.isRequired
+    setSearch: PropTypes.func.isRequired,
+    allColabs: PropTypes.object.isRequired,
 }
 
 export default CommandPanel;

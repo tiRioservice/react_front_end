@@ -45,7 +45,6 @@ function ColabList({allColabs, setHideDetails, setCurrentColab, searchTerm, sear
         if(searchTerm !== undefined){
             if(searchTerm !== ""){
                 if(searchConfig === "matricula"){
-                    console.log("matricula")
                     setColabs(allColabs.data.filter(colab => {
                         return colab.colab_matricula.toString().includes(searchTerm.toString());
                     }).map( colab => {
@@ -106,10 +105,6 @@ function ColabList({allColabs, setHideDetails, setCurrentColab, searchTerm, sear
         }
 
     }, [allColabs, allColabsFetched, fetchColabs, fetched, filterColabs])
-
-    useEffect(() => {
-        console.log("colabList: ", searchTerm)
-    }, [searchTerm])
 
     return (
         <>
