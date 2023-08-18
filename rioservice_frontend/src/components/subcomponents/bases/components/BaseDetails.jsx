@@ -77,6 +77,7 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
             
             options['body'] = JSON.stringify(baseRawData)
             baseCrud.removeBase(setStatusMessage, options)
+
             if(currentBase.end_id != null){
                 const endRawData = {
                     "end_id": currentBase.end_id
@@ -85,8 +86,10 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
                 options['body'] = JSON.stringify(endRawData)
                 endCrud.removeEnd(options)
             }
+
+            setBaseRemoved({"base_removed":true})
         }
-    }, [currentBase, user, host, setStatusMessage])
+    }, [currentBase, user, host, setStatusMessage, setBaseRemoved])
     
     useEffect(() => {
         if(currentBase != undefined && !editing){
@@ -146,7 +149,7 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
         if(statusMessage !== undefined){
             setTimeout(() => {
                 setHideDetails(true)
-                setBaseRemoved({"base_removed":true})
+                setStatusMessage(undefined)
             }, 3000)
         }
     }, [statusMessage, setHideDetails, setBaseRemoved])

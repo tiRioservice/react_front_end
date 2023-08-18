@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import './scss/style.scss';
 import CommandPanel from './components/CommandPanel';
 import InsertForm from './components/InsertForm';
@@ -25,15 +25,8 @@ function Colaboradores({user, host}){
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("CPF")
 
-    useEffect(()=>{
-        setColabInserted({"colab_inserted":false})
-        setColabRemoved({"colab_removed":false})
-        refresh.current = true
-    }, [])
-
-    useEffect(() => {
-        if(colabInserted !== undefined && "colab_inserted" in colabInserted) {
-            const crud = new ColabCrud();
+    const refreshColabList = useCallback(() => {
+        const crud = new ColabCrud();
             options['headers'] = {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
@@ -43,19 +36,32 @@ function Colaboradores({user, host}){
             }
 
             crud.getColabList(setAllColabs, options)
-        }
+            refresh.current = false
+    }, [user, host])
 
-        refresh.current = false
-    }, [colabInserted, host, user])
+    useEffect(()=>{
+        setColabInserted({"colab_inserted":false})
+        setColabRemoved({"colab_removed":false})
+        refreshColabList()
+    }, [])
+
+    useEffect(() => {
+        if(colabInserted !== undefined && "colab_inserted" in colabInserted) {
+            if(colabInserted.colab_inserted == true){
+                setColabInserted({"colab_inserted":false})
+                refreshColabList()
+            }
+        }
+    }, [colabInserted, refreshColabList])
 
     useEffect(() => {
         if(colabRemoved != undefined && "colab_removed" in colabRemoved) {
             if(colabRemoved.colab_removed == true){
-                setColabInserted({"colab_inserted":true})
                 setColabRemoved({"colab_removed":false})
+                refreshColabList()
             }
         }
-    }, [colabRemoved, refresh])
+    }, [colabRemoved, refreshColabList])
 
     return (
         <>
@@ -68,7 +74,7 @@ function Colaboradores({user, host}){
                 
                 <ColabList allColabs={allColabs} setHideDetails={setHideDetails} setCurrentColab={setCurrentColab} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 
-                <ColabDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentColab={currentColab} user={user} setColabRemoved={setColabRemoved}/>
+                <ColabDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentColab={currentColab} user={user} setColabRemoved={setColabRemoved} refreshColabList={refreshColabList}/>
             </section>
         </>
     )

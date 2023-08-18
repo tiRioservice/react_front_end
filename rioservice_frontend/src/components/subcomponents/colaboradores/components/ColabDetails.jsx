@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
 import ColabCrud from "./ColabCrud";
 import EndCrud from "../../common/EndCrud";
+import CargoCrud from "../../cargos/components/CargoCrud";
+import BaseCrud from "../../bases/components/BaseCrud";
 import PropTypes from "prop-types";
 const colabCrud = new ColabCrud()
 const endCrud = new EndCrud()
@@ -11,10 +13,48 @@ const options = {
     body: undefined
 }
 
-function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, setColabRemoved}){
+function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, setColabRemoved, refreshColabList}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
+    const [allCargos, setAllCargos] = useState(undefined)
+    const [allBases, setAllBases] = useState(undefined)
+
+    const resetAllData = useCallback(() => {
+        setStatusMessage(undefined)
+        setEditing(false)
+        setHideDetails(true)
+        refreshColabList()
+    }, [setHideDetails, setStatusMessage, setEditing, refreshColabList])
+
+    const fetchAllBases = useCallback(()=>{
+        const baseCrud = new BaseCrud();
+        options['headers'] = {
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + user["x-JWT"],
+            "Host": host
+        }
+
+        options['method'] = "GET"
+        baseCrud.getBaseList(setAllBases, options)
+    }, [user, host])
+
+    const fetchAllCargos = useCallback(()=>{
+        const cargoCrud = new CargoCrud();
+        options['headers'] = {
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + user["x-JWT"],
+            "Host": host
+        }
+
+        options['method'] = "GET"
+        delete options.body
+        cargoCrud.getCargoList(setAllCargos, options)
+    }, [user, host])
 
     const handleEdit = () => {
         setEditing(true)
@@ -38,7 +78,8 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
             "colab_admissao": undefined,
             "colab_email": undefined,
             "colab_centro_custo": undefined,
-            "colab_status": undefined
+            "colab_status": undefined,
+            "cargo_id": undefined
         }
 
         colabFields.forEach( field => {
@@ -59,7 +100,10 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
             }
 
 
-            data[field.classList[1]] = firstChild.innerText != '' ? firstChild.innerText : null
+            data[field.classList[1]] = (firstChild.innerText != '') ? (firstChild.innerText) : (null)
+            if(data[field.classList[1]] == null){
+                delete data[field.classList[1]]
+            }
         })
 
         options['headers'] = {
@@ -73,11 +117,6 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
         options['method'] = "POST"
         options['body'] = JSON.stringify(data)
         colabCrud.updateColab(setStatusMessage, options)
-
-        setTimeout(() => {
-            setStatusMessage(undefined)
-            setEditing(false)
-        }, 3000)
     }
 
     const handleRemove = () => {
@@ -106,8 +145,15 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                 options['body'] = JSON.stringify(endRawData)
                 endCrud.removeEnd(options)
             }
+
+            setColabRemoved({"colab_removed":true})
         }
     }
+
+    useEffect(() => {
+        fetchAllCargos()
+        fetchAllBases()
+    },[fetchAllCargos, fetchAllBases])
     
     useEffect(() => {
         if(currentColab != undefined && editing === false){
@@ -126,7 +172,25 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                     if(field.classList[1] === 'colab_est_civil'){
                         capitalizedField = 'Estado civil'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
-                    } if(field.classList[1] === 'colab_fone'){
+                    } else
+                    if(field.classList[1] === 'cargo_id'){ 
+                        capitalizedField = 'Cargo'
+                        allCargos.data.forEach( cargo => {
+                            if(cargo.cargo_id == currentColab.cargo_id){
+                                field.innerHTML = `${capitalizedField}: <span id="${cargo.cargo_id}" className="${field.classList[1]}_value">${cargo.cargo_nome}</span>`
+
+                            }
+                        })
+                    } else
+                    if(field.classList[1] === 'base_id'){ 
+                        capitalizedField = 'Base'
+                        allBases.data.forEach( base => {
+                            if(base.base_id == currentColab.base_id){
+                                field.innerHTML = `${capitalizedField}: <span id="${base.base_id}" className="${field.classList[1]}_value">${base.base_nome}</span>`
+                            }
+                        })
+                    } 
+                    else if(field.classList[1] === 'colab_fone'){
                         capitalizedField = 'Telefone(fixo)'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${(currentColab[field.classList[1]] == null)?('Não definido'):(currentColab[field.classList[1]])}</span>`
                     } else if(field.classList[1] === 'colab_centro_custo'){
@@ -192,7 +256,7 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
 
             setEndId(currentColab.end_id)
         }
-    }, [currentColab, editing])
+    }, [currentColab, editing, allCargos, allBases])
 
     useEffect(() => {
         if(editing){
@@ -213,7 +277,52 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                     const attribute = span.innerText !== 'Não definido' ? span.innerHTML : ''
                     input.setAttribute('value', attribute)
 
-                    if(field.classList[1] === 'colab_est_civil'){
+                    if(field.classList[1] === 'base_id'){
+                        const fieldText = field.childNodes[1].id
+                        const base_id = parseInt(fieldText)
+                        
+                        if(!isNaN(base_id) && allBases !== undefined){
+                            input = document.createElement('select')
+                            input.setAttribute('class', 'colab-input')
+                            field.innerHTML = 'Cargo'
+                            const allOptions = allBases.data
+
+                            allOptions.forEach( option => {
+                                const optionElement = document.createElement('option')
+                                optionElement.setAttribute('value', option.base_id)
+                                optionElement.innerHTML = option.base_nome
+                                if(option.base_id == base_id){
+                                    optionElement.setAttribute('selected', true)
+                                }
+
+                                input.appendChild(optionElement)
+                            })
+                            field.parentNode.hidden = false
+                        }
+
+                    } else if(field.classList[1] === 'cargo_id'){
+                        const fieldText = field.childNodes[1].id
+                        const cargo_id = parseInt(fieldText)
+                        
+                        if(!isNaN(cargo_id) && allCargos !== undefined){
+                            input = document.createElement('select')
+                            input.setAttribute('class', 'colab-input')
+                            field.innerHTML = 'Cargo'
+                            const allOptions = allCargos.data
+
+                            allOptions.forEach( option => {
+                                const optionElement = document.createElement('option')
+                                optionElement.setAttribute('value', option.cargo_id)
+                                optionElement.innerHTML = option.cargo_nome
+                                if(option.cargo_id == cargo_id){
+                                    optionElement.setAttribute('selected', true)
+                                }
+
+                                input.appendChild(optionElement)
+                            })
+                            field.parentNode.hidden = false
+                        }
+                    } else if(field.classList[1] === 'colab_est_civil'){
                         field.innerHTML = 'Estado civil'
                         input = document.createElement('select')
                         input.setAttribute('class', 'colab-input')
@@ -279,17 +388,15 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                 }
             })
         }
-    }, [editing])
+    }, [editing, fetchAllCargos, allCargos, allBases])
 
     useEffect(() => {
-        if(statusMessage != undefined){
+        if(statusMessage !== undefined){
             setTimeout(() => {
-                setHideDetails(true)
-                setStatusMessage(undefined)
-                setColabRemoved({"colab_removed":true})
+                resetAllData()
             }, 3000)
         }
-    }, [statusMessage, setHideDetails, setColabRemoved])
+    }, [statusMessage, resetAllData])
     
     return (
         <div id="colab-details" className={!hideDetails ? '' : 'colab-details-hidden'}>
@@ -350,6 +457,12 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                                 <p className="colab-text colab_centro_custo">Centro de custo: <span className="colab_centro_custo_value">Centro de custo do colaborador</span></p>
                             </li>
                             <li className="box">
+                                <p className="colab-text base_id">Base:<span className="base_id_value">xx</span></p>
+                            </li>
+                            <li className="box">
+                                <p className="colab-text cargo_id">Cargo:<span className="cargo_id_value">xx</span></p>
+                            </li>
+                            <li className="box">
                                 <p className="colab-text colab_status">Status: <span className="colab_status_value">Status do colaborador</span></p>
                             </li>
                         </ul>
@@ -386,7 +499,8 @@ ColabDetails.propTypes = {
     currentColab: PropTypes.object,
     user: PropTypes.object,
     host: PropTypes.string,
-    setColabRemoved: PropTypes.func
+    setColabRemoved: PropTypes.func,
+    refreshColabList: PropTypes.func
 }
 
 export default ColabDetails;

@@ -16,7 +16,7 @@ export async function GetColabList(setAllColabs, options) {
 }
 
 export async function GetColabData(setColab, options) {
-    await fetch(`http://${options.headers["Host"]}/app/v2/colaboradores/buscar`, options)
+    await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/buscar`, options)
     .then(res => res.json())
     .then(data => {
         setColab(data)
