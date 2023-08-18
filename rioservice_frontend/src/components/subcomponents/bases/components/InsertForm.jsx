@@ -11,7 +11,7 @@ const options = {
     body: undefined
 }
 
-function CommandPanel({user, setInsert, host, setBaseInserted, refresh}){
+function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
     const [feedbackMessage, setFeedbackMessage] = useState(undefined)
     const [insertEndReady, setInsertEndReady] = useState(false)
     const [endData, setEndData] = useState(undefined)
@@ -40,14 +40,16 @@ function CommandPanel({user, setInsert, host, setBaseInserted, refresh}){
 
             options['body'] = JSON.stringify(rawData)
             baseCrud.insertBase(setFeedbackMessage, base_inserted, options)
+            console.log(feedbackMessage)
             
             setTimeout(() => {
                 if(base_inserted.current === true){
                     n_bases.current = 1
+                    setBaseInserted({"base_inserted":true})
                 }
             }, 1000)
         }
-    }, [baseData_ref, base_inserted, user, host])
+    }, [baseData_ref, base_inserted, setFeedbackMessage, user, host, setBaseInserted, feedbackMessage])
 
     const resetForm = useCallback(() =>{
         document.getElementById('nome').value = ''
@@ -60,8 +62,8 @@ function CommandPanel({user, setInsert, host, setBaseInserted, refresh}){
             setBaseInserted({"base_inserted":false})
         }, 3000)
 
-        refresh.current = true
-    }, [setInsert, setBaseInserted, setEndData, setFeedbackMessage, refresh])
+        fetchList()
+    }, [setInsert, setBaseInserted, setEndData, setFeedbackMessage, fetchList])
 
     const handleInsertEnd = () => {
         const insertEnd = document.getElementById('insertEnd')
@@ -170,7 +172,7 @@ CommandPanel.propTypes = {
     setInsert: PropTypes.func,
     host: PropTypes.string,
     setBaseInserted: PropTypes.func,
-    refresh: PropTypes.object
+    fetchList: PropTypes.func
 }
 
 export default CommandPanel;

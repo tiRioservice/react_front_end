@@ -16,6 +16,14 @@ export async function GetCargoList(setAllCargos, options) {
     })
 }
 
+export async function GetCargoData(setCargo, options) {
+    await fetch(`http://${options.headers["Host"]}/app/v2/cargos/buscar`, options)
+    .then(res => res.json())
+    .then(data => {
+        setCargo(data)
+    })
+}
+
 export async function UpdateCargo(setStatusMessage, options){
     await fetch(`http://${options.headers["Host"]}/app/v2/cargos/atualizar`, options)
     .then(res => res.json())
@@ -36,6 +44,7 @@ export default function CargoCrud() {
     return {
         insertCargo: InsertCargo,
         getCargoList: GetCargoList,
+        getCargoData: GetCargoData,
         updateCargo: UpdateCargo,
         removeCargo: RemoveCargo
     }

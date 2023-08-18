@@ -43,7 +43,7 @@ function Colaboradores({user, host}){
         setColabInserted({"colab_inserted":false})
         setColabRemoved({"colab_removed":false})
         refreshColabList()
-    }, [])
+    }, [refreshColabList])
 
     useEffect(() => {
         if(colabInserted !== undefined && "colab_inserted" in colabInserted) {

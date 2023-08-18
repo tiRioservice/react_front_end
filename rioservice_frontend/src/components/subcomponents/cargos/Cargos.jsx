@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import './scss/style.scss';
 import CommandPanel from './components/CommandPanel';
 import InsertForm from './components/InsertForm';
@@ -22,7 +22,6 @@ function Cargos({user, host, fetchConfigs}){
     const [currentCargoConfigs, setCurrentCargoConfigs] = useState(undefined)
     const [cargoInserted, setCargoInserted] = useState(undefined)
     const [cargoRemoved, setCargoRemoved] = useState(undefined)
-    const refresh = useRef(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("nome")
 
@@ -37,13 +36,11 @@ function Cargos({user, host, fetchConfigs}){
         }
 
         cargoCrud.getCargoList(setAllCargos, options)
-        refresh.current = false
-    },[user, host, refresh])
+    },[user, host])
 
     useEffect(() => {
         setCargoInserted({"cargo_inserted":false})
         setCargoRemoved({"cargo_removed":false})
-        refresh.current = true
         fetchList()
     }, [fetchList])
 
@@ -70,7 +67,7 @@ function Cargos({user, host, fetchConfigs}){
             <section id="cargos">
                 {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch} allCargos={(allCargos != undefined)?(allCargos):({})}/>):(<></>)) : (<></>)}
 
-                {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setCargoInserted={setCargoInserted} cargoInserted={cargoInserted} refresh={refresh}/>) : (<></>)}
+                {(insert) ? (<InsertForm host={host} user={user} setInsert={setInsert} setCargoInserted={setCargoInserted} cargoInserted={cargoInserted} fetchList={fetchList}/>) : (<></>)}
 
                 {(search) ? (<CargoSearch setSearchTerm={setSearchTerm} setSearchConfig={setSearchConfig} searchConfig={searchConfig}/>) : (<></>)}
 

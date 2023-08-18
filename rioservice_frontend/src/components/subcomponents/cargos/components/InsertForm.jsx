@@ -9,7 +9,7 @@ const options = {
     body: undefined
 }
 
-function InsertForm({host, user, setInsert, setCargoInserted, cargoInserted,  refresh}){
+function InsertForm({host, user, setInsert, setCargoInserted, cargoInserted,  fetchList}){
     const [feedbackMessage, setFeedbackMessage] = useState(undefined)
     const [cargoData, setCargoData] = useState(undefined)
     const [cargoConfig, setCargoConfig] = useState(undefined)
@@ -76,11 +76,11 @@ function InsertForm({host, user, setInsert, setCargoInserted, cargoInserted,  re
             setCargoData(undefined)
             setFeedbackMessage(undefined)
             setCargoInserted({"cargo_inserted":false})
-            refresh.current = true
+            fetchList()
             setAll_ok(false)
         }, 1000)
 
-    }, [setInsert, setCargoInserted, setCargoData, setFeedbackMessage, refresh, setAll_ok])
+    }, [setInsert, setCargoInserted, setCargoData, setFeedbackMessage, fetchList, setAll_ok])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -170,7 +170,7 @@ InsertForm.propTypes = {
     setInsert: PropTypes.func.isRequired,
     setCargoInserted: PropTypes.func.isRequired,
     cargoInserted: PropTypes.object.isRequired,
-    refresh: PropTypes.object.isRequired
+    fetchList: PropTypes.func.isRequired
 }
 
 export default InsertForm;

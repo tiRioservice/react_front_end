@@ -11,10 +11,17 @@ const options = {
     body: undefined
 }
 
-function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setBaseRemoved}){
+function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setBaseRemoved, fetchList}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
+
+    const resetAllData = useCallback(() => {
+        setEditing(false)
+        setHideDetails(true)
+        setStatusMessage(undefined)
+        fetchList()
+    },[setHideDetails, setStatusMessage, setEditing, fetchList])
 
     const handleEdit = useCallback(() => {
         setEditing(true)
@@ -148,11 +155,10 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
     useEffect(() => {
         if(statusMessage !== undefined){
             setTimeout(() => {
-                setHideDetails(true)
-                setStatusMessage(undefined)
+                resetAllData()
             }, 3000)
         }
-    }, [statusMessage, setHideDetails, setBaseRemoved])
+    }, [statusMessage, resetAllData])
     
     return (
         <div id="base-details" className={!hideDetails ? '' : 'base-details-hidden'}>
@@ -211,7 +217,8 @@ BaseDetails.propTypes = {
     user: PropTypes.object,
     host: PropTypes.string,
     setBaseInserted: PropTypes.func,
-    setBaseRemoved: PropTypes.func
+    setBaseRemoved: PropTypes.func,
+    fetchList: PropTypes.func
 }
 
 export default BaseDetails;

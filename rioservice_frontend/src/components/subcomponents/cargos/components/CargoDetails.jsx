@@ -148,7 +148,8 @@ function CargoDetails({hideDetails, setHideDetails, currentCargo, user, host, se
         setHideDetails(true)
         setStatusMessage(undefined)
         fetchConfigs()
-    }, [setEditing, fetchConfigs, setHideDetails, setStatusMessage])
+        fetchList()
+    }, [setEditing, fetchConfigs, setHideDetails, setStatusMessage, fetchList])
 
     const handleEdit = useCallback(() => {
         setEditing(true)
