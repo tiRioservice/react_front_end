@@ -1,0 +1,14 @@
+@use '../../../scss/reset';
+@import '../../../scss/var';
+@import '../../../scss/basicElements';
+
+section#estoque{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    div.estoqueMenu{
+        @extend %panel;
+        height: fit-content;
+    }
+}

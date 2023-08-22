@@ -8,6 +8,7 @@ import Cargos from '../subcomponents/cargos/Cargos';
 import CargoConfigCrud from '../dashboard/components/CargoConfigCrud';
 import PropTypes from "prop-types";
 import Fornecedores from '../subcomponents/fornecedores/Fornecedores';
+import Estoque from '../subcomponents/estoque/Estoque';
 const options = {
     method: undefined,
     headers: undefined,
@@ -52,6 +53,12 @@ function Dashboard({user, logOut, host}){
                 return <Fornecedores host={host} user={user}/>
             case "Bases":
                 return <Bases host={host} user={user}/>
+            case "Estoque":
+                return <Estoque host={host} user={user} setPage={setPage}/>
+            case "Categorias":
+                return "Categorias"
+            case "Produtos":
+                return "Produtos"
             default:
                 return "Default"
         }

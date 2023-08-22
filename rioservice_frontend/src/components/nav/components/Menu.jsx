@@ -52,6 +52,30 @@ function Menu({userCargoConfig, menuOpen, setMenuOpen, setPage, logOut, setProfi
                     </li>
                     ) : (<></>)}
 
+                {(userCargoConfig !== undefined && userCargoConfig.data[3]["perm_id"] === 4 && userCargoConfig.data[3]["nvl_acesso"] === true) 
+                ? (
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Fornecedores")
+                        }}>
+                            Fornecedores
+                        </button>
+                    </li>
+                    ) : (<></>)}
+
+                {(userCargoConfig !== undefined && userCargoConfig.data[4]["perm_id"] === 5 && userCargoConfig.data[4]["nvl_acesso"] === true) 
+                ? (
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Estoque")
+                        }}>
+                            Estoque
+                        </button>
+                    </li>
+                    ) : (<></>)}
+
                 
 
                     --- x ---

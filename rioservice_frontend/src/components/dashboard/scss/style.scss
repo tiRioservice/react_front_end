@@ -43,7 +43,7 @@ section#dashboard{
                     width: $side;
                     height: $side;
 
-                    path.btn-icon{
+                    path.btn-icon, rect.btn-icon{
                         fill:white;
                     }
                 }
