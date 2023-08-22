@@ -65,7 +65,7 @@ function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
         fetchList()
     }, [setInsert, setBaseInserted, setEndData, setFeedbackMessage, fetchList])
 
-    const handleInsertEnd = () => {
+    const handleInsertEnd = useCallback(() => {
         const insertEnd = document.getElementById('insertEnd')
         
         if (insertEnd.checked) {
@@ -73,7 +73,7 @@ function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
         } else {
             setInsertEndReady(false)
         }
-    }
+    }, [setInsertEndReady])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -149,7 +149,7 @@ function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
 
                         <div className="inputBox">
                             <label htmlFor="insertEnd">Inserir um endereço:</label>
-                            <input type="checkbox" name="insertEnd" id="insertEnd" onInput={handleInsertEnd}/>
+                            <input type="checkbox" name="insertEnd" id="insertEnd" onChange={handleInsertEnd}/>
                         </div>
 
                         <div className={(insertEndReady) ? ("formEnd") : ("hidden")}>

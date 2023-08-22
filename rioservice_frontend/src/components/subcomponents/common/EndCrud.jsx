@@ -2,7 +2,7 @@ export async function InsertEnd(setFeedbackMessage, end_id, options) {
     await fetch(`http://${options.headers["Host"]}/app/v2/enderecos/inserir`, options)
     .then(res => res.json())
     .then(data => {
-        setFeedbackMessage(data.msg)
+        setFeedbackMessage(data.action)
         end_id.current = data.new_end
     })
 }
@@ -39,11 +39,19 @@ export async function GetEndColabId(colabData, setColabData, options) {
     })
 }
 
+export async function GetEndFornId(fornData, setFornData, options) {
+    await fetch(`http://${options.headers["Host"]}/app/v2/enderecos/buscar_id`, options)
+    .then(res => res.json())
+    .then(data => {
+        setFornData({...fornData, "end_id": data.end_id})
+    })
+}
+
 export async function UpdateEnd(setStatusMessage, options) {
     await fetch(`http://${options['headers']['Host']}/app/v2/enderecos/atualizar`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.msg)
+        setStatusMessage(data.action)
     })
 }
 

@@ -7,6 +7,7 @@ import Colaboradores from '../subcomponents/colaboradores/Colaboradores';
 import Cargos from '../subcomponents/cargos/Cargos';
 import CargoConfigCrud from '../dashboard/components/CargoConfigCrud';
 import PropTypes from "prop-types";
+import Fornecedores from '../subcomponents/fornecedores/Fornecedores';
 const options = {
     method: undefined,
     headers: undefined,
@@ -47,6 +48,8 @@ function Dashboard({user, logOut, host}){
                 return <Cargos host={host} user={user} fetchConfigs={fetchConfigs}/>
             case "Colaboradores":
                 return <Colaboradores host={host} user={user}/>
+            case "Fornecedores":
+                return <Fornecedores host={host} user={user}/>
             case "Bases":
                 return <Bases host={host} user={user}/>
             default:

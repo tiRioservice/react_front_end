@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import EndCrud from './EndCrud';
 import PropTypes from 'prop-types';
-const crud = new EndCrud();
 const options = {
     method: undefined,
     headers: undefined,
@@ -13,8 +12,8 @@ function EnderecoDetails({end_id, user, host}){
     
     useEffect(() => {
         if(end_id != undefined && user != undefined && host != undefined){
+            const crud = new EndCrud();
             options.method = "POST"
-            options.body = JSON.stringify({"end_id":end_id})
             options['headers'] = {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
@@ -23,6 +22,7 @@ function EnderecoDetails({end_id, user, host}){
                 "Host": host
             }
             
+            options.body = JSON.stringify({"end_id":end_id})
             crud.getEndData(setEnd, options)
         }
     }, [end_id, user, host])
