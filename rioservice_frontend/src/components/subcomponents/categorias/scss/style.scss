@@ -1,0 +1,28 @@
+@use '../../../scss/reset';
+@import '../../../scss/var';
+@import '../../../scss/basicElements';
+
+section#categorias{
+    height: fit-content;
+
+    div.panel{
+        @extend %panel;
+    }
+
+    div#categ-list{
+        margin: 0 8px;
+        border-radius: 4px;border: solid 1px $color_one;
+
+        table{
+            @extend %table-frame;
+        }
+    }
+
+    div#categ-details{
+        @extend %details;
+    }
+
+    div.categ-details-hidden{
+        display: none !important;
+    }
+}

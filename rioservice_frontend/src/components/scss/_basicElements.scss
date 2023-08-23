@@ -140,7 +140,7 @@
                 margin: 4px;
                 width: 100%;
                 
-                p.colab-text, p.cargo-text, p.base-text, p.forn-text{
+                p.colab-text, p.cargo-text, p.base-text, p.forn-text, p.categ-text{
                     font-weight: 600;
                     width: 100%;
                     
@@ -148,7 +148,7 @@
                         font-weight: 400;
                     }
                     
-                    input.colab-input, input.cargo-input, input.base-input, input.forn-input{
+                    input.colab-input, input.cargo-input, input.base-input, input.forn-input, input.categ-input{
                         @extend %basic-input;
                     }
                     
