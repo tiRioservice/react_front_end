@@ -6,10 +6,12 @@ import Bases from '../subcomponents/bases/Bases';
 import Colaboradores from '../subcomponents/colaboradores/Colaboradores';
 import Cargos from '../subcomponents/cargos/Cargos';
 import CargoConfigCrud from '../dashboard/components/CargoConfigCrud';
+import CategCrud from '../subcomponents/categorias/components/CategCrud';
 import PropTypes from "prop-types";
 import Fornecedores from '../subcomponents/fornecedores/Fornecedores';
 import Estoque from '../subcomponents/estoque/Estoque';
 import Categorias from '../subcomponents/categorias/Categorias';
+import Itens from '../subcomponents/itens/Itens';
 const options = {
     method: undefined,
     headers: undefined,
@@ -20,6 +22,23 @@ function Dashboard({user, logOut, host}){
     const userCargo = user["cargo_id"]
     const [page, setPage] = useState("Dashboard")
     const [userCargoConfig, setUserCargoConfig] = useState(undefined)
+    const [stockCategs, setStockCategs] = useState(undefined)
+    const [allBases, setAllBases] = useState(undefined)
+
+    const fetchCategs = useCallback(() => {
+        const categCrud = new CategCrud();
+        options['headers'] = {
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "Cross-Origin-Opener-Policy": "*",
+            "Authorization": "Bearer " + user["x-JWT"],
+            "Host": host
+        }
+
+        options['method'] = "GET"
+        delete options.body
+        categCrud.getCategList(setStockCategs, options)
+    },[user, host])
 
     const fetchConfigs = useCallback(()=>{
         const cargoConfigCrud = CargoConfigCrud();
@@ -53,13 +72,13 @@ function Dashboard({user, logOut, host}){
             case "Fornecedores":
                 return <Fornecedores host={host} user={user}/>
             case "Bases":
-                return <Bases host={host} user={user}/>
+                return <Bases host={host} user={user} allBases={allBases} setAllBases={setAllBases}/>
             case "Estoque":
-                return <Estoque setPage={setPage}/>
+                return <Estoque user={user} host={host} setPage={setPage} fetchCategs={fetchCategs} setAllBases={setAllBases}/>
             case "Categorias":
                 return <Categorias host={host} user={user}/>
-            case "Produtos":
-                return "Produtos"
+            case "Itens":
+                return <Itens host={host} user={user} stockCategs={stockCategs} allBases={allBases}/>
             default:
                 return "Default"
         }

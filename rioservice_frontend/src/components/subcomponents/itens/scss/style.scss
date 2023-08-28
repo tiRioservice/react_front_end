@@ -2,14 +2,14 @@
 @import '../../../scss/var';
 @import '../../../scss/basicElements';
 
-section#categorias{
+section#itens{
     height: fit-content;
 
     div.panel{
         @extend %panel;
     }
 
-    div#categ-search{
+    div#item-search{
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -40,7 +40,7 @@ section#categorias{
                     background-color: $color_one;
                     color: white;
 
-                    input.categ-search-config{
+                    input.item-search-config{
                         margin: 0 4px;
                         width: 24px;
                         height: 24px;
@@ -55,7 +55,7 @@ section#categorias{
         }
     }
 
-    div#categ-list{
+    div#item-list{
         margin: 0 8px;
         border-radius: 4px;border: solid 1px $color_one;
 
@@ -64,11 +64,11 @@ section#categorias{
         }
     }
 
-    div#categ-details{
+    div#item-details{
         @extend %details;
     }
 
-    div.categ-details-hidden{
+    div.item-details-hidden{
         display: none !important;
     }
 }

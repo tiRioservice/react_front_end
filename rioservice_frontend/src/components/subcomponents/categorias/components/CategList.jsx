@@ -42,7 +42,7 @@ function CategList({allCategs, setHideDetails, setCurrentCateg, searchTerm, sear
         if(searchTerm !== undefined){
             if(searchTerm !== ""){
                 if(searchConfig != "nome"){
-                    setCategorias(allCategs.data.filter( categ => {
+                    setCategorias(allCategs.categ_list.filter( categ => {
                         return categ.categ_id.toString().includes(searchTerm.toString());
                     }).map( categ => {
                         return (
@@ -60,7 +60,7 @@ function CategList({allCategs, setHideDetails, setCurrentCateg, searchTerm, sear
                         )
                     }))
                 } else {
-                    setCategorias(allCategs.data.filter(categ => {
+                    setCategorias(allCategs.categ_list.filter(categ => {
                         return categ['categ_nome'].split(' ').join().includes(searchTerm);
                     }).map( categ => {
                         return (
@@ -82,15 +82,13 @@ function CategList({allCategs, setHideDetails, setCurrentCateg, searchTerm, sear
                 mapCategs();
             }
         }
-    }, [allCategs, getCateg, mapCategs, searchTerm, searchConfig])
+    }, [allCategs, getCateg, mapCategs, searchTerm, searchConfig, setCategorias])
 
     useEffect(() => {
         if(allCategs) {
-            if(!fetched){
-                if(!allCategs.msg){
-                    allCategsFetched === undefined && fetchCategs();
-                    filterCategs();
-                }
+            if(fetched != undefined){
+                fetchCategs();
+                filterCategs();
             }
 
         }

@@ -40,7 +40,7 @@ export async function RemoveCateg(setStatusMessage, options){
     })
 }
 
-export default function CargoCrud() {
+export default function CategCrud() {
     return {
         insertCateg: InsertCateg,
         getCategList: GetCategList,

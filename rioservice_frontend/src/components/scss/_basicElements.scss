@@ -140,7 +140,7 @@
                 margin: 4px;
                 width: 100%;
                 
-                p.colab-text, p.cargo-text, p.base-text, p.forn-text, p.categ-text{
+                p.colab-text, p.cargo-text, p.base-text, p.forn-text, p.categ-text, p.item-text, p.estoque-text{
                     font-weight: 600;
                     width: 100%;
                     
@@ -148,11 +148,11 @@
                         font-weight: 400;
                     }
                     
-                    input.colab-input, input.cargo-input, input.base-input, input.forn-input, input.categ-input{
+                    input.colab-input, input.cargo-input, input.base-input, input.forn-input, input.categ-input, input.item-input, input.estoque-input{
                         @extend %basic-input;
                     }
                     
-                    select.colab-input, select.cargo-input, input.base-input, input.forn-input{
+                    select.colab-input, select.cargo-input, select.item-input, input.base-input, input.forn-input, select.estoque-input{
                         @extend %basic-input;
                     }
                 }
@@ -191,7 +191,6 @@
             }
         }
 
-
         h2.detailsAdvice{
             font-size: 14px;
             font-weight: 600;
@@ -228,6 +227,27 @@
                     flex-direction: row;
                     flex-wrap: wrap;
                     justify-content: space-between;
+                }
+            }
+        }
+
+        div.estoqueDetails{
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+
+            p.estoque-data{
+                font-weight: bold;
+                width: 100%;
+                margin: 8px 0;
+
+                span{
+                    margin-left: 8px;
+                    font-weight: 400;
+                }
+
+                input.estoque-input, select.estoque-input{
+                    @extend %basic-input;
                 }
             }
         }
@@ -391,6 +411,10 @@
                     width: 24px;
                     height: 24px;
                     margin: 0 8px;
+                }
+
+                select{
+                    @extend %basic-input;
                 }
             }
 

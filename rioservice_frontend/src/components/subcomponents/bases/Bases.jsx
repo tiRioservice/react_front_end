@@ -13,10 +13,9 @@ const options = {
     body: undefined
 }
 
-function Bases({user, host}){
+function Bases({user, host, allBases, setAllBases}){
     const [insert, setInsert] = useState(false)
     const [search, setSearch] = useState(false)
-    const [allBases, setAllBases] = useState(undefined)
     const [hideDetails, setHideDetails] = useState(true)
     const [currentBase, setCurrentBase] = useState(undefined)
     const [baseInserted, setBaseInserted] = useState(undefined)
@@ -35,7 +34,7 @@ function Bases({user, host}){
         }
         
         crud.getBaseList(setAllBases, options)
-    }, [user, host])
+    }, [user, host, setAllBases])
 
     useEffect(() => {
         setBaseInserted({"base_inserted":false})
@@ -80,7 +79,9 @@ function Bases({user, host}){
 
 Bases.propTypes = {
     user: PropTypes.object,
-    host: PropTypes.string
+    host: PropTypes.string,
+    allBases: PropTypes.object,
+    setAllBases: PropTypes.func
 }
 
 export default Bases;

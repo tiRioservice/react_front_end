@@ -93,8 +93,8 @@ function CategDetails({hideDetails, setHideDetails, currentCateg, user, host, se
             const hora = splited[4]
             const registro = `${dia} de ${mes} de ${ano} às ${hora}`
 
-            const cargoFields = document.querySelectorAll('.categ-text')
-            cargoFields.forEach( field => {
+            const categFields = document.querySelectorAll('.categ-text')
+            categFields.forEach( field => {
                 let capitalizedField = undefined
                 if(field.classList[1] != 'registro'){
                     capitalizedField = field.classList[1].split('_')[1].charAt(0).toUpperCase() + field.classList[1].split('_')[1].slice(1)
