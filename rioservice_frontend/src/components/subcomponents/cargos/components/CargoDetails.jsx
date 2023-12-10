@@ -179,7 +179,6 @@ function CargoDetails({hideDetails, setHideDetails, currentCargo, user, host, se
             if(field.classList[1] != 'registro')
             {
                 if(firstChild.nodeName == 'INPUT'){
-                    console.log(firstChild.value)
                     cargoData[field.classList[1]] = (!isNaN(firstChild.value)) ? (Number(firstChild.value)) : (firstChild.value)
                 } else if(firstChild.nodeName == 'SPAN'){
                     cargoData[field.classList[1]] = (!isNaN(firstChild.innerText)) ? (Number(firstChild.innerText)) : (firstChild.innerText)

@@ -31,7 +31,7 @@ function DashboardContent({user, host, setPage}){
         <>
             <div className="mensagem">
                 <h2>Olá, {user["colab_nome"]}!</h2>
-                <p>Esta é a sua dashboard, aqui poderá realizar algumas operações. Selecione uma área abaixo ou comece pelo menu acima a direita!</p>
+                <p>Bem-vindo à dashboard, aqui você poderá realizar algumas operações. Selecione uma área abaixo ou comece pelo menu acima a direita!</p>
             </div>
             <ul className="buttonList">
                 {(userCargoConfig !== undefined && userCargoConfig.data[0]["perm_id"] === 1 && userCargoConfig.data[0]["nvl_acesso"] === true) 
@@ -81,6 +81,25 @@ function DashboardContent({user, host, setPage}){
                     </button>
                 </li>
                 ) : (<></>)}
+
+                {/* {(userCargoConfig !== undefined && userCargoConfig.data[5]["perm_id"] === 6 && userCargoConfig.data[5]["nvl_acesso"] === true)
+                ? (<li className="buttonListItem">
+                    <button onClick={() => setPage("Cotacoes")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none">
+                            <path className="btn-icon" d="M1200 5109 c-156 -31 -300 -177 -330 -338 -5 -29 -10 -94 -10 -142 l0 -89 -107 0 c-155 0 -234 -28 -331 -115 -64 -58 -119 -163 -132 -255 -13 -91 -13 -3214 0 -3305 26 -178 154 -320 325 -361 49 -11 213 -14 918 -14 472 0 857 3 855 8 -2 4 -23 45 -47 92 -24 47 -56 119 -71 160 l-28 75 -780 5 -780 5 -26 24 -26 24 0 1631 c1 1266 3 1635 13 1647 30 39 20 39 1187 39 l1132 0 29 -29 29 -29 0 -821 0 -820 64 24 c55 21 142 45 249 69 l27 6 0 789 c0 740 -1 793 -18 849 -39 122 -134 226 -254 275 -53 22 -57 22 -968 27 l-915 5 -3 65 c-2 36 2 82 8 103 21 71 -48 67 1188 67 727 0 1119 -4 1138 -10 62 -22 59 44 62 -1101 l2 -1047 23 -6 c12 -3 40 -6 62 -6 38 0 168 -20 228 -35 l27 -7 0 1073 c0 1170 0 1159 -57 1256 -63 109 -176 191 -292 213 -67 12 -2326 12 -2391 -1z"/>
+                            <path className="btn-icon" d="M1175 3631 c-154 -70 -133 -283 31 -321 51 -12 907 -12 958 0 150 34 186 223 59 310 l-37 25 -485 2 c-455 3 -489 2 -526 -16z"/>
+                            <path className="btn-icon" d="M1162 2939 c-118 -59 -122 -231 -7 -296 l40 -23 622 0 c414 0 631 4 650 11 43 16 92 69 104 112 15 55 3 108 -33 152 -56 67 -31 65 -715 65 -609 0 -619 0 -661 -21z"/>
+                            <path className="btn-icon" d="M4565 2611 c-46 -12 -90 -37 -117 -69 -13 -15 -223 -349 -467 -741 -244 -392 -447 -709 -451 -704 -4 4 -74 104 -156 222 -93 133 -163 225 -187 242 -131 95 -316 23 -346 -136 -17 -91 -6 -112 280 -520 284 -407 302 -427 394 -441 65 -9 142 17 186 63 36 38 1100 1739 1120 1791 18 47 13 127 -11 176 -26 55 -72 92 -136 112 -51 15 -63 16 -109 5z"/>
+                            <path className="btn-icon" d="M3470 2439 c-494 -41 -926 -396 -1065 -874 -47 -161 -59 -384 -30 -551 77 -441 393 -807 817 -949 715 -239 1472 222 1593 968 34 209 9 428 -72 640 -21 54 -29 65 -39 55 -6 -7 -48 -71 -92 -141 l-79 -129 13 -61 c16 -75 18 -248 3 -337 -30 -190 -143 -399 -289 -533 -264 -245 -632 -321 -974 -201 -221 77 -419 251 -525 461 -87 173 -120 350 -101 529 68 607 655 997 1230 817 47 -15 88 -27 92 -28 4 0 39 50 76 110 l69 110 -24 13 c-13 7 -70 28 -126 46 -154 50 -313 68 -477 55z"/>
+                            <path className="btn-icon" d="M1164 2256 c-65 -29 -104 -112 -90 -191 9 -48 68 -112 114 -125 23 -6 255 -10 614 -10 l577 0 42 63 c23 34 64 88 90 120 56 68 54 86 -14 130 l-41 27 -631 0 c-508 -1 -636 -3 -661 -14z"/>
+                            <path className="btn-icon" d="M1175 1571 c-77 -35 -115 -106 -101 -189 12 -76 75 -127 169 -137 34 -3 260 -5 502 -3 l440 3 7 91 c4 49 14 124 22 165 9 41 16 77 16 82 0 4 -228 7 -507 7 -471 0 -511 -2 -548 -19z"/>
+                        </g>
+                    </svg>
+                    Cotações
+                    </button>
+                </li>
+                ) : (<></>)} */}
 
             </ul>
         </>

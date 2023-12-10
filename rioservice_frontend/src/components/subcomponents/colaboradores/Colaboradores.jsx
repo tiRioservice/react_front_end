@@ -24,6 +24,9 @@ function Colaboradores({user, host}){
     const refresh = useRef(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("CPF")
+    const newEndRef = useRef(currentColab)
+    const newEndNumberRef = useRef(undefined)
+    const newEndReferenceRef = useRef(undefined)
 
     const refreshColabList = useCallback(() => {
         const crud = new ColabCrud();
@@ -64,6 +67,7 @@ function Colaboradores({user, host}){
     }, [colabRemoved, refreshColabList])
 
     return (
+        
         <>
             <section id="colaboradores">
                 {(!insert) ? ((!search) ? (<CommandPanel setInsert={setInsert} setSearch={setSearch} allColabs={(allColabs != undefined)?(allColabs):({})}/>) : ("")) : ("")}
@@ -74,7 +78,7 @@ function Colaboradores({user, host}){
                 
                 <ColabList allColabs={allColabs} setHideDetails={setHideDetails} setCurrentColab={setCurrentColab} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 
-                <ColabDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentColab={currentColab} user={user} setColabRemoved={setColabRemoved} refreshColabList={refreshColabList}/>
+                <ColabDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentColab={currentColab} user={user} setColabRemoved={setColabRemoved} refreshColabList={refreshColabList} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef}/>
             </section>
         </>
     )

@@ -76,6 +76,18 @@ function Menu({userCargoConfig, menuOpen, setMenuOpen, setPage, logOut, setProfi
                     </li>
                     ) : (<></>)}
 
+                {/* {(userCargoConfig !== undefined && userCargoConfig.data[5]["perm_id"] === 6 && userCargoConfig.data[5]["nvl_acesso"] === true) 
+                ? (
+                    <li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Cotacoes")
+                        }}>
+                            Cotações
+                        </button>
+                    </li>
+                    ) : (<></>)} */}
+
                 
 
                     --- x ---

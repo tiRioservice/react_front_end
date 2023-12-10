@@ -31,6 +31,10 @@ function InsertCargoConfigs({setAllCheckboxes}){
                 <label htmlFor="estoqueAccess" className="estoqueAccess">Área de Estoque</label>
                 <input type="checkbox" name="estoqueAccess" id="estoqueAccess" className="cargoConfig config5"/>
             </div>
+            <div className="box">
+                <label htmlFor="cotacoesAccess" className="cotacoesAccess">Área de Cotações</label>
+                <input type="checkbox" name="cotacoesAccess" id="cotacoesAccess" className="cargoConfig config6"/>
+            </div>
         </div>
     </>)
 }

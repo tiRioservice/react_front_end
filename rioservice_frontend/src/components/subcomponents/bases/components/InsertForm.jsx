@@ -40,7 +40,6 @@ function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
 
             options['body'] = JSON.stringify(rawData)
             baseCrud.insertBase(setFeedbackMessage, base_inserted, options)
-            console.log(feedbackMessage)
             
             setTimeout(() => {
                 if(base_inserted.current === true){
@@ -49,7 +48,7 @@ function CommandPanel({user, setInsert, host, setBaseInserted, fetchList}){
                 }
             }, 1000)
         }
-    }, [baseData_ref, base_inserted, setFeedbackMessage, user, host, setBaseInserted, feedbackMessage])
+    }, [baseData_ref, base_inserted, setFeedbackMessage, user, host, setBaseInserted])
 
     const resetForm = useCallback(() =>{
         document.getElementById('nome').value = ''

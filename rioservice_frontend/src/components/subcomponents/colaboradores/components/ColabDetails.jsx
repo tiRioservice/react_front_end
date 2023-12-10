@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
 import ColabCrud from "./ColabCrud";
 import EndCrud from "../../common/EndCrud";
 import CargoCrud from "../../cargos/components/CargoCrud";
 import BaseCrud from "../../bases/components/BaseCrud";
 import PropTypes from "prop-types";
+import EnderecoForm from "../../common/EnderecoForm";
 const colabCrud = new ColabCrud()
 const endCrud = new EndCrud()
 const options = {
@@ -13,12 +14,15 @@ const options = {
     body: undefined
 }
 
-function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, setColabRemoved, refreshColabList}){
+function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, setColabRemoved, refreshColabList, newEndRef, newEndNumberRef, newEndReferenceRef}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
     const [allCargos, setAllCargos] = useState(undefined)
     const [allBases, setAllBases] = useState(undefined)
+    const saveNewEndReady = useRef(false)
+    const saveNewEnd = useRef(undefined)
+    const [editNewEndStart, setEditNewStart] = useState(false)
 
     const resetAllData = useCallback(() => {
         setStatusMessage(undefined)
@@ -56,12 +60,18 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
         cargoCrud.getCargoList(setAllCargos, options)
     }, [user, host])
 
+    const editAddAddress = useCallback((e) => {
+        e.preventDefault()
+        setEditNewStart(true)
+    }, [setEditNewStart])
+
     const handleEdit = () => {
         setEditing(true)
     }
 
     const handleEditSave = () => {
         setStatusMessage('Salvando alterações...')
+        let end_id = null
         const colabFields = document.querySelectorAll('.colab-text')
         const data = {
             "colab_id": undefined,
@@ -80,6 +90,10 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
             "colab_centro_custo": undefined,
             "colab_status": undefined,
             "cargo_id": undefined
+        }
+
+        if(editNewEndStart){
+            end_id = handleEditSaveNewAddress({"new end": "new end"})
         }
 
         colabFields.forEach( field => {
@@ -118,6 +132,11 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
         options['body'] = JSON.stringify(data)
         colabCrud.updateColab(setStatusMessage, options)
     }
+
+    const handleEditSaveNewAddress = useCallback((endData) => {
+        console.log("save new address data: ", endData)
+        return 1989
+    },[])
 
     const handleRemove = () => {
         if(currentColab.colab_id != null){
@@ -280,12 +299,12 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                     if(field.classList[1] === 'base_id'){
                         const fieldText = field.childNodes[1].id
                         const base_id = parseInt(fieldText)
-                        
-                        if(!isNaN(base_id) && allBases !== undefined){
+                        const allOptions = allBases.data
+
+                        if(allBases !== undefined){
                             input = document.createElement('select')
                             input.setAttribute('class', 'colab-input')
                             field.innerHTML = 'Cargo'
-                            const allOptions = allBases.data
 
                             allOptions.forEach( option => {
                                 const optionElement = document.createElement('option')
@@ -304,7 +323,7 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                         const fieldText = field.childNodes[1].id
                         const cargo_id = parseInt(fieldText)
                         
-                        if(!isNaN(cargo_id) && allCargos !== undefined){
+                        if(allCargos !== undefined){
                             input = document.createElement('select')
                             input.setAttribute('class', 'colab-input')
                             field.innerHTML = 'Cargo'
@@ -468,8 +487,12 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                         </ul>
 
                         {(endId !== undefined && endId !== null) 
-                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} />) 
-                        : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
+                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} editing={editing} saveNewEnd={saveNewEnd} saveNewEndReady={saveNewEndReady} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef} end_type={2}/>) 
+                        : (
+                        <>
+                        {(editing && editNewEndStart) ? (<EnderecoForm/>) : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
+                        {(editing && !editNewEndStart)?(<button className="btnEditAddAddress" onClick={editAddAddress}>Inserir um endereço</button>):(<></>)}
+                        </>)}
 
                         <div className="btnOrganizer">
                             {(!editing) ? (<button className="btn btnRemoveBase" onClick={handleRemove}>Remover</button>) : (<></>)}
@@ -481,6 +504,7 @@ function ColabDetails({hideDetails, setHideDetails, currentColab, user, host, se
                             <button className="btnCloseModal" onClick={() => {
                                 setHideDetails(true)
                                 setEditing(false)
+                                setEditNewStart(false)
                             }}>Fechar</button>
                         </div>
                     </>
@@ -500,7 +524,10 @@ ColabDetails.propTypes = {
     user: PropTypes.object,
     host: PropTypes.string,
     setColabRemoved: PropTypes.func,
-    refreshColabList: PropTypes.func
+    refreshColabList: PropTypes.func,
+    newEndRef: PropTypes.object,
+    newEndNumberRef: PropTypes.object,
+    newEndReferenceRef: PropTypes.object
 }
 
 export default ColabDetails;

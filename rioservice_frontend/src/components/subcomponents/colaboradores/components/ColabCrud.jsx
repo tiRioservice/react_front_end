@@ -7,6 +7,12 @@ export async function InsertColab(setFeedbackMessage, colab_inserted, options) {
     })
 }
 
+export async function InsertColabFromExcelFile(options) {
+    const res = await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/inserir`, options)
+    const data = await res.json()
+    return data
+}
+
 export async function GetColabList(setAllColabs, options) {
     await fetch(`http://${options.headers['Host']}/app/v2/colaboradores/listar`, options)
     .then(res => res.json())
@@ -42,6 +48,7 @@ export async function RemoveColab(setStatusMessage, options){
 export default function ColabCrud() {
     return {
         insertColab: InsertColab,
+        insertColabFromExcelFile: InsertColabFromExcelFile,
         getColabList: GetColabList,
         getColabData: GetColabData,
         updateColab: UpdateColab,

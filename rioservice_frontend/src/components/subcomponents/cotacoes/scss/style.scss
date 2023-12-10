@@ -2,14 +2,14 @@
 @import '../../../scss/var';
 @import '../../../scss/basicElements';
 
-section#colaboradores{
+section#cotacoes{
     height: fit-content;
 
     div.panel{
         @extend %panel;
     }
 
-    div#colab-search{
+    div#cotacao-search{
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -40,7 +40,7 @@ section#colaboradores{
                     background-color: $color_one;
                     color: white;
 
-                    input.colab-search-config{
+                    input.cotacao-search-config{
                         margin: 0 4px;
                         width: 24px;
                         height: 24px;
@@ -54,8 +54,8 @@ section#colaboradores{
             max-width: none;
         }
     }
-
-    div#colab-list{
+    
+    div#cotacao-list{
         margin: 0 8px;
         border-radius: 4px;border: solid 1px $color_one;
 
@@ -64,32 +64,11 @@ section#colaboradores{
         }
     }
 
-    div#colab-details{
+    div#cotacao-details{
         @extend %details;
     }
 
-    div.colab-details-hidden{
+    div.cotacao-details-hidden{
         display: none !important;
-    }
-
-    div.unit_or_file{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        button{
-            @extend %button;
-            margin: 4px;
-            // width: 50%;
-            height: 32px;
-            border-radius: 4px;
-            border: solid 1px $color_one;
-            background-color: $color_one;
-            color: white;
-
-            &:hover{
-                background-color: white;
-                color: $color_one;
-            }
-        }
     }
 }

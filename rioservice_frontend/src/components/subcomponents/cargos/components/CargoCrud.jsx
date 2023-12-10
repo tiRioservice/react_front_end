@@ -16,8 +16,8 @@ export async function GetCargoList(setAllCargos, options) {
     })
 }
 
-export async function GetCargoData(setCargo, options) {
-    await fetch(`http://${options.headers["Host"]}/app/v2/cargos/buscar`, options)
+export async function GetCargoData(setCargo, cargo_id, options) {
+    await fetch(`http://${options.headers["Host"]}/app/v2/cargos/buscar/${cargo_id}`, options)
     .then(res => res.json())
     .then(data => {
         setCargo(data)

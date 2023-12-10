@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import './scss/style.scss';
 import CommandPanel from './components/CommandPanel';
 import InsertForm from './components/InsertForm';
@@ -22,6 +22,9 @@ function Bases({user, host, allBases, setAllBases}){
     const [baseRemoved, setBaseRemoved] = useState(undefined)
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("nome")
+    const newEndRef = useRef(currentBase)
+    const newEndNumberRef = useRef(undefined)
+    const newEndReferenceRef = useRef(undefined)
 
     const fetchList = useCallback(() => {
         const crud = new BaseCrud();
@@ -71,7 +74,7 @@ function Bases({user, host, allBases, setAllBases}){
                 
                 <BaseList allBases={allBases} setHideDetails={setHideDetails} setCurrentBase={setCurrentBase} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 
-                <BaseDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentBase={currentBase} user={user} setBaseRemoved={setBaseRemoved} fetchList={fetchList}/>
+                <BaseDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentBase={currentBase} user={user} setBaseRemoved={setBaseRemoved} fetchList={fetchList} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef}/>
             </section>
         </>
     )

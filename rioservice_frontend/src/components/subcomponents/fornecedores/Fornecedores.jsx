@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import './scss/style.scss';
 import CommandPanel from './components/CommandPanel';
 import InsertForm from './components/InsertForm';
@@ -24,6 +24,9 @@ function Fornecedores({user, host}){
     const [fornRemoved, setFornRemoved] = useState(undefined)
     const [searchTerm, setSearchTerm] = useState("")
     const [searchConfig, setSearchConfig] = useState("nome_fantasia")
+    const newEndRef = useRef(currentForn)
+    const newEndNumberRef = useRef(undefined)
+    const newEndReferenceRef = useRef(undefined)
 
     const refreshFornList = useCallback(() => {
         const crud = new FornCrud();
@@ -73,7 +76,7 @@ function Fornecedores({user, host}){
                 
                 <FornList allForns={allForns} setHideDetails={setHideDetails} setCurrentForn={setCurrentForn} searchTerm={searchTerm} searchConfig={searchConfig}/>
                 
-                <FornDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentForn={currentForn} user={user} setFornRemoved={setFornRemoved} refreshFornList={refreshFornList}/>
+                <FornDetails host={host} hideDetails={hideDetails} setHideDetails={setHideDetails} currentForn={currentForn} user={user} setFornRemoved={setFornRemoved} refreshFornList={refreshFornList} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef}/>
             </section>
         </>
     )

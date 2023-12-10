@@ -1,0 +1,9 @@
+@use '../../../scss/reset';
+@import '../../../scss/var';
+@import '../../../scss/basicElements';
+
+p.end-text{
+    input{
+        @extend %basic-input;
+    }
+}

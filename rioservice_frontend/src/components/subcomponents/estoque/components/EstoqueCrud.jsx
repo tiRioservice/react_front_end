@@ -12,7 +12,11 @@ export async function GetEstoqueList(setAllEstoques, options) {
     await fetch(`http://${options.headers["Host"]}/app/v2/estoque/listar`, options)
     .then(res => res.json())
     .then(data => {
-        setAllEstoques(data)
+        if(typeof setAllEstoques != "function"){
+            setAllEstoques.current = data
+        } else {
+            setAllEstoques(data)
+        }
     })
 }
 

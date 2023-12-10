@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
 import BaseCrud from "./BaseCrud";
 import EndCrud from "../../common/EndCrud";
@@ -11,10 +11,12 @@ const options = {
     body: undefined
 }
 
-function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setBaseRemoved, fetchList}){
+function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setBaseRemoved, fetchList, newEndRef, newEndNumberRef, newEndReferenceRef}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
+    const saveNewEndReady = useRef(false)
+    const saveNewEnd = useRef(undefined)
 
     const resetAllData = useCallback(() => {
         setEditing(false)
@@ -59,11 +61,6 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
         options['method'] = "POST"
         options['body'] = JSON.stringify(data)
         baseCrud.updateBase(setStatusMessage, options)
-
-        setTimeout(() => {
-            setEditing(false)
-            setStatusMessage(undefined)
-        }, 3000)
     }, [user, host, setStatusMessage])
 
     const handleRemove = useCallback(() => {
@@ -188,7 +185,7 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
                         </ul>
 
                         {(endId !== undefined && endId !== null) 
-                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} />) 
+                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} editing={editing} saveNewEnd={saveNewEnd} saveNewEndReady={saveNewEndReady} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef} end_type={1}/>) 
                         : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
 
                         <div className="btnOrganizer">
@@ -196,7 +193,14 @@ function BaseDetails({hideDetails, setHideDetails, currentBase, user, host, setB
                             {(!editing) ? (
                                 <button className="btn btnEdit" onClick={() => handleEdit()}>Editar</button>
                                 ) : (
-                                <button className="btn btnEditSave" onClick={() => handleEditSave()}>Salvar</button>
+                                <button className="btn btnEditSave" onClick={() => {
+                                    
+                                    if(saveNewEndReady.current === true){
+                                        saveNewEnd.current = true
+                                    }
+
+                                    handleEditSave()
+                                }}>Salvar</button>
                             )}
                             <button className="btn btnCloseModal" onClick={() => {
                                 setHideDetails(true)
@@ -218,7 +222,10 @@ BaseDetails.propTypes = {
     host: PropTypes.string,
     setBaseInserted: PropTypes.func,
     setBaseRemoved: PropTypes.func,
-    fetchList: PropTypes.func
+    fetchList: PropTypes.func,
+    newEndRef: PropTypes.object,
+    newEndNumberRef: PropTypes.object,
+    newEndReferenceRef: PropTypes.object,
 }
 
 export default BaseDetails;

@@ -54,7 +54,7 @@ section#dashboard{
                     color: $color_one;
 
                     svg{
-                        path.btn-icon{
+                        path.btn-icon, rect.btn-icon{
                             fill: $color_one;
                         }
                     }
@@ -66,13 +66,13 @@ section#dashboard{
     div.mensagem{
         width: 100%;
         text-align: center;
-        padding: 4px;
         min-height: 120px;
-        line-height: 40px;
+        line-height: 32px;
         color: $color_one;
-
+        padding: 8px;
+        
         p{
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
     }
 }

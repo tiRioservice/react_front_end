@@ -173,6 +173,33 @@
             }
         }
 
+        div.inputBox{
+            width: 100%;
+            display: flex;
+            margin: 8px 0;
+
+            label{
+                @extend %form-label;
+                width: fit-content
+            }
+            input{
+                @extend %form-input;
+                height: fit-content;
+                cursor: pointer;
+            }
+            
+            input[type="checkbox"]{
+                width: 24px;
+                height: 24px;
+                margin: 0 8px;
+            }
+            
+            select{
+                cursor: pointer;
+                @extend %basic-input;
+            }
+        }
+
         p.cargoConfigItem{
             margin: 2px 8px;
             display: flex;
@@ -336,6 +363,18 @@
             color: $color_cinnabar;
         }
 
+        button.btnEditAddAddress{
+            @extend %button;
+            background-color: $color_one;
+            justify-self: center;
+            color: white;
+
+            &:hover{
+                background-color: transparent;
+                color: $color_one;
+            }
+        }
+
         @media screen and (min-width: 425px){
             width: 90%;
             height: auto;
@@ -371,7 +410,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 8px;
         height: 100%;
 
         button{
@@ -405,15 +443,17 @@
                 input{
                     @extend %form-input;
                     height: fit-content;
+                    cursor: pointer;
                 }
-
+                
                 input[type="checkbox"]{
                     width: 24px;
                     height: 24px;
                     margin: 0 8px;
                 }
-
+                
                 select{
+                    cursor: pointer;
                     @extend %basic-input;
                 }
             }
@@ -431,6 +471,54 @@
                 width: 100%;
                 display: flex;
                 justify-content: flex-start;
+
+                button.submitButton{
+                    @extend %button;
+                    width: 128px;
+                    background-color: $color_one;
+                    color: white;
+
+                    &:hover{
+                        background-color: transparent;
+                        color: $color_one;
+                    }
+                }
+
+                span.feedbackMessage{
+                    @extend %feedbackMessage;
+                }
+
+                @media screen and (min-width: 425px){
+                    justify-content: center;
+                }
+            }
+
+            div.organizer-file{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                h2{
+                    font-size: 20px;
+                    padding: 8px;
+                    margin: 8px 0;
+                    color: white;
+                    color: $color_one;
+                    border-radius: 4px;
+                }
+
+                label.colabFileInput-label{
+                    margin: 16px;
+                    span{
+                        @extend %button;
+                        cursor: pointer;
+                    }
+                }
+
+                input#colabFileInput{
+                    display: none;
+                }
 
                 button.submitButton{
                     @extend %button;
@@ -482,6 +570,263 @@
                     }
                 }
             }
+
+            div#cotacao-item-selector{
+                fieldset{
+                    width: inherit;
+                    legend{
+                        width: 100%;
+                        text-align: center;
+                    }
+
+                    h2{
+                        font-size: 20px;
+                        padding: 8px;
+                        margin: 8px 0;
+                        color: white;
+                        background-color: $color_one;
+                        font-family: sans-serif;
+                    }
+        
+                    div.setOrganizer{
+                        display: flex;
+                        justify-content: center;
+                        width: 100vw;
+        
+                        div.option{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 4px;
+                            border: solid 1px $color_one;
+                            padding: 4px;
+                            border-radius: 4px;
+                            background-color: $color_one;
+                            color: white;
+        
+                            input.cotacao-search-config{
+                                margin: 0 4px;
+                                width: 24px;
+                                height: 24px;
+                            }
+                        }
+
+                        div.addItem{
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            margin: 0 8px;
+
+                            input#cotacao-search{
+                                flex-grow: 1;
+                                margin: 0;
+                            }
+                        }
+                    }
+
+                    div.setSugestionList{
+                        width: 100%;
+                        ul.sugestionList{
+                            margin: 0 8px;
+                            li.sugestion{
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin: 2px 0;
+                                background-color: $color_three;
+                                padding-left: 4px;
+                                border-radius: 4px;
+                                button{
+                                    margin:0;
+                                }
+                            }
+                        }
+                    }
+
+                    div.selectedItems{
+                        h2{
+                            font-size: 18px;
+                            padding: 8px;
+                            margin: 8px 0;
+                            color: $color_one;
+                            background-color: white;
+                            font-family: sans-serif;
+                            font-weight: 400;
+                            width: 100%;
+                            text-align: center;
+                        }
+
+                        
+                        ul.selectedItemsList{
+                            list-style: none;
+                                li{
+                                    border: solid 1px $color_one;
+                                    margin: 8px;
+                                    padding: 8px;
+                                    border-radius: 4px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+
+                                    div.quotationItem{
+                                        display: flex;
+                                        justify-content: flex-start;
+        
+                                        h2{
+                                            color: $color_one;
+                                            font-size: 16px;
+                                            font-weight: bold;
+                                            flex-basis: fit-content;
+                                            flex-grow: 1;
+                                            background-color: $color_three;
+                                            border-radius: 4px;
+                                            margin: 8px;
+                                        }
+        
+                                        div.dataOrganizer{
+                                            display: flex;
+                                            width: 100%;
+                                            justify-content: space-between;
+                                            flex-wrap: wrap;
+                                            align-items: center;
+                                            flex-grow: 3;
+                                            margin: 8px;
+        
+                                            p{
+                                                span{
+                                                    font-weight: 600;
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    div.qntModule{
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        margin: 8px;
+                                        width: 100%;
+                                    }
+
+                                    div.actionOrganizer{
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: flex-end;
+                                        width: 100%;
+                                    }
+
+                                    @media screen and (min-width: 375px) {
+                                        flex-direction: row;
+                                        justify-content: space-between;
+                                        flex-wrap: wrap;
+
+                                        div.quotationItem{
+                                            flex-basis: 100%;
+                                            flex-shrink: 1;
+                                            flex-grow: 1;
+                                        }
+                                        div.qntModule{
+                                            flex-basis: 100px;
+                                            flex-grow: 1;
+                                            flex-shrink: 1;
+                                            width: auto;
+                                        }
+                                        div.actionOrganizer{
+                                            flex-basis: 100px;
+                                            flex-grow: 1;
+                                            flex-shrink: 1;
+                                            width: auto;
+                                        }
+                                    }
+
+                                    @media screen and (min-width: 768px){
+                                        div.quotationItem{
+                                            flex-basis: auto;
+                                            flex-grow: 1;
+                                        }
+                                    }
+                                }
+
+                                div.qntModule{
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: space-between
+                                }
+                            }
+                        }
+                    }
+        
+                input{
+                    @extend %basic-input;
+                    max-width: none;
+                }
+            }
+
+            div#cotacao-forn-selector{
+                width: 100%;
+                fieldset{
+                    width: inherit;
+
+                    h2{
+                        width: inherit;
+                        font-size: 20px;
+                        padding: 8px;
+                        margin: 8px 0;
+                        color: white;
+                        background-color: $color_one;
+                        font-family: sans-serif;
+                    }
+                    
+                    div.fornSelector{
+                        padding: 8px;
+                        select#selectedForn{
+                        @extend %basic-input;
+                        }
+
+                        p.aviso{
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: $color_one;
+                            width: 100%;
+                            text-align: center;
+                        }
+
+                        @media screen and (min-width: 375px){
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                        @media screen and (min-width: 425px){
+                            flex-direction: row;
+                        }
+                    }
+
+                    }
+        
+                input{
+                    @extend %basic-input;
+                    max-width: none;
+                }
+            }
+
+            div#validTitle{
+                width: 100%;
+                // display: flex;
+                // align-items: center;
+                fieldset{
+                    width: inherit;
+                    h2{
+                        font-size: 20px;
+                        padding: 8px;
+                        margin: 8px 0;
+                        color: white;
+                        background-color: $color_one;
+                        font-family: sans-serif;
+                        width: inherit;
+                    }}}
 
             @media screen and (min-width: 425px){
                 flex-direction: row;

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import EnderecoDetails from "../../common/EnderecoDetails";
 import FornCrud from "./FornCrud";
 import EndCrud from "../../common/EndCrud";
@@ -9,11 +9,13 @@ const options = {
     body: undefined
 }
 
-function FornDetails({hideDetails, setHideDetails, currentForn, user, host, setFornRemoved, refreshFornList}){
+function FornDetails({hideDetails, setHideDetails, currentForn, user, host, setFornRemoved, refreshFornList, newEndRef, newEndNumberRef, newEndReferenceRef}){
     const [editing, setEditing] = useState(false)
     const [statusMessage, setStatusMessage] = useState(undefined)
     const [endId, setEndId] = useState(undefined)
     const [allForns, setAllForns] = useState(undefined)
+    const saveNewEndReady = useRef(false)
+    const saveNewEnd = useRef(undefined)
 
     const resetAllData = useCallback(() => {
         setStatusMessage(undefined)
@@ -250,7 +252,7 @@ function FornDetails({hideDetails, setHideDetails, currentForn, user, host, setF
                         </ul>
 
                         {(endId !== undefined && endId !== null) 
-                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} />) 
+                        ? (<EnderecoDetails user={user ? user : undefined} host={host} end_id={endId} editing={editing} saveNewEnd={saveNewEnd} saveNewEndReady={saveNewEndReady} newEndRef={newEndRef} newEndNumberRef={newEndNumberRef} newEndReferenceRef={newEndReferenceRef} end_type={3}/>) 
                         : (<h2 className="detailsAdvice">Endereço não cadastrado!</h2>)}
 
                         <div className="btnOrganizer">
@@ -282,7 +284,10 @@ FornDetails.propTypes = {
     user: PropTypes.object,
     host: PropTypes.string,
     setFornRemoved: PropTypes.func,
-    refreshFornList: PropTypes.func
+    refreshFornList: PropTypes.func,
+    newEndRef: PropTypes.object,
+    newEndNumberRef: PropTypes.object,
+    newEndReferenceRef: PropTypes.object,
 }
 
 export default FornDetails;

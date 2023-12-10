@@ -1,10 +1,12 @@
+// import readXlsxFile from 'read-excel-file';
+import ExcelFileProcess from './excelFileProcess';
+
 import {useEffect, useState, useRef, useCallback} from 'react';
+import { PropTypes } from 'prop-types';
 import EnderecoForm from '../../common/EnderecoForm';
 import ColabCrud from './ColabCrud';
 import EndCrud from '../../common/EndCrud';
-import { PropTypes } from 'prop-types';
 const colabCrud = new ColabCrud();
-const endCrud = new EndCrud()
 const options = {
     method: undefined,
     headers: undefined,
@@ -22,6 +24,15 @@ function CommandPanel({setInsert, host, user, setColabInserted, refresh}){
     const colab_inserted = useRef(false)
     const end_id = useRef(null)
     const colabData_ref = useRef(null)
+    const [insertOption, setInsertOption] = useState(undefined)
+
+    const setInserColabOne_true = useCallback(() => {
+        setInsertOption("manual")
+    },[])
+    
+    const setInserColabFile_true = useCallback(() => {
+        setInsertOption("file")
+    },[])
 
     const insertColab_func = useCallback(() => {
         if(n_colabs.current != 1 && colab_inserted.current == false){
@@ -108,6 +119,20 @@ function CommandPanel({setInsert, host, user, setColabInserted, refresh}){
         }
     }
 
+    const handleSubmitFile = useCallback((e) => {
+        e.preventDefault()
+        const input = e.target.elements.colabFile
+        const excelFileProcess = new ExcelFileProcess(host, user, refresh.current, setColabInserted)
+        excelFileProcess.setFile(input.files[0])
+        excelFileProcess.processFile()
+    }, [host, user, refresh, setColabInserted])
+
+    const setFileName = useCallback((e) => {
+        e.preventDefault()
+        const filename = document.getElementById("colabFileInput-label-span")
+        filename.innerHTML = (e.target.files[0].name).substring(0, 15) + "..."
+    }, [])
+
     useEffect(()=>{
         if(user !== undefined && host !== undefined && endData !== undefined && end_id.current === null){
             options['headers'] = {
@@ -122,7 +147,7 @@ function CommandPanel({setInsert, host, user, setColabInserted, refresh}){
             options['body'] = JSON.stringify(endData)
         }
         if(endData !== undefined && options.headers.Host !== undefined){
-            endCrud.insertEnd(setFeedbackMessage, end_id, options)
+            EndCrud.insertEnd(setFeedbackMessage, end_id, options)
         }
     }, [endData, end_id, user, host, setFeedbackMessage])
 
@@ -146,7 +171,16 @@ function CommandPanel({setInsert, host, user, setColabInserted, refresh}){
 
     return (
         <>
-            <div id="form-panel">
+            <div className="unit_or_file">
+                <button className='btn btn-colab-one' onClick={
+                    setInserColabOne_true
+                }>Inserir manualmente</button>
+                <button className='btn btn-colab-file' onClick={
+                    setInserColabFile_true
+                }>Enviar arquivo</button>
+            </div>
+
+            <div id="form-panel" className={(insertOption === 'manual')?(''):('hidden')}>
                 <div className='panel'>
                     <form onSubmit={handleSubmit} className='form-insert-colaborador'>
                         <div className='inputBox'>
@@ -178,6 +212,22 @@ function CommandPanel({setInsert, host, user, setColabInserted, refresh}){
                     </form>
 
                     <p className='alerta-senha2'>A senha provisória é : matricula + nome + 4 ultimos digitos do cpf</p>
+                </div>
+            </div>
+            
+            <div id="form-panel" className={(insertOption === 'file')?(''):('hidden')}>
+                <div className='panel'>
+                    <form onSubmit={handleSubmitFile} className='form-insert-colaborador' encType="multipart/form-data">
+                        <div className="organizer-file">
+                            <h2>Carregar arquivo</h2>
+                            <label htmlFor="colabFileInput" className="colabFileInput-label">
+                                <span id="colabFileInput-label-span">Selecione um arquivo Excel (.xlsx)</span>
+                            </label>
+                            <input type="file" name="colabFile" id="colabFileInput" accept='xslx' title='Envie um arquivo excel com a extensão .xlsx' onChange={setFileName}/>
+                            <button className="submitButton">Enviar</button>
+                            <span className={feedbackMessage === undefined ? 'hidden' : 'feedbackMessage'}>{feedbackMessage !== undefined ? feedbackMessage : "Mensagem indefinida"}</span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </>

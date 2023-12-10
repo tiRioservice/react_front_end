@@ -25,9 +25,8 @@ function Profile({user, host, profileOpen, setProfileOpen, setMenuOpen, trocarSe
             "Host": host
         }
 
-        options['method'] = "POST"
-        options['body'] = JSON.stringify({"cargo_id": user.cargo_id})
-        cargoCrud.getCargoData(setCargo, options)
+        options['method'] = "GET"
+        cargoCrud.getCargoData(setCargo, user["cargo_id"], options)
     }, [user, host])
 
     const setDates = useCallback(() => {
@@ -74,7 +73,7 @@ function Profile({user, host, profileOpen, setProfileOpen, setMenuOpen, trocarSe
                     <p className="user-attributes">Naturalidade: <span>{user.colab_naturalidade != null ? user.colab_naturalidade : '-'}</span></p>
                     <p className="user-attributes">Escolaridade: <span>{user.colab_escolaridade != null ? user.colab_escolaridade : '-'}</span></p>
                     <p className="user-attributes">Admissão: <span>{(user.colab_admissao != null) ? (userAdmissao) : ('-')}</span></p>
-                    <p className="user-attributes">Cargo: <span>{(cargo != undefined) ? (cargo.data.cargo_nome) : ('-')}</span></p>
+                    <p className="user-attributes">Cargo: <span>{(cargo != undefined) ? (cargo.cargo_nome) : ('-')}</span></p>
 
                     {(endId !== undefined && endId !== null) 
                     ? (<EnderecoDetails user={user} host={host} end_id={endId} />) 

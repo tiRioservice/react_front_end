@@ -1,10 +1,29 @@
-export async function InsertEnd(setFeedbackMessage, end_id, options) {
+export async function InsertEnd(setFeedbackMessage=null, end_id, options) {
     await fetch(`http://${options.headers["Host"]}/app/v2/enderecos/inserir`, options)
-    .then(res => res.json())
-    .then(data => {
-        setFeedbackMessage(data.action)
-        end_id.current = data.new_end
-    })
+    .then(res => {
+        res.json()
+        .then(data => {
+            if(setFeedbackMessage != null){
+                setFeedbackMessage(data.action)
+            }
+
+            if(typeof end_id == 'function'){
+                end_id(data.new_end)
+            }
+
+            if(typeof end_id == 'number'){
+                end_id = data.new_end
+                return data.new_end
+            }
+            })
+        }
+    )
+}
+
+export async function InsertEndFromExcel(options) {
+    const res = await fetch(`http://${options.headers["Host"]}/app/v2/enderecos/inserir`, options)
+    const data = await res.json()
+    return data
 }
 
 export async function GetEndList(setAllEnds, options) {
@@ -51,7 +70,9 @@ export async function UpdateEnd(setStatusMessage, options) {
     await fetch(`http://${options['headers']['Host']}/app/v2/enderecos/atualizar`, options)
     .then(res => res.json())
     .then(data => {
-        setStatusMessage(data.action)
+        if(setStatusMessage != undefined){
+            setStatusMessage(data.action)
+        }
     })
 }
 
@@ -62,6 +83,7 @@ export async function RemoveEnd(options){
 export default function EndCrud() {
     return {
         insertEnd: InsertEnd,
+        insertEndFromExcel: InsertEndFromExcel,
         getEndList: GetEndList,
         getEndData: GetEndData,
         getEndBaseId: GetEndBaseId,

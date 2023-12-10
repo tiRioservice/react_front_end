@@ -12,7 +12,11 @@ export async function GetItemList(setAllItems, options) {
     await fetch(`http://${options.headers["Host"]}/app/v2/estoque/itens/listar`, options)
     .then(res => res.json())
     .then(data => {
-        setAllItems(data)
+        if(typeof setAllItems != "function"){
+            setAllItems.current = data
+        } else {
+            setAllItems(data)
+        }
     })
 }
 
