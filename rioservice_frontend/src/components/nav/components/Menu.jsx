@@ -75,6 +75,7 @@ function Menu({userCargoConfig, menuOpen, setMenuOpen, setPage, logOut, setProfi
                         </button>
                     </li>
                     ) : (<></>)}
+                
 
                 {/* {(userCargoConfig !== undefined && userCargoConfig.data[5]["perm_id"] === 6 && userCargoConfig.data[5]["nvl_acesso"] === true) 
                 ? (
@@ -88,7 +89,15 @@ function Menu({userCargoConfig, menuOpen, setMenuOpen, setPage, logOut, setProfi
                     </li>
                     ) : (<></>)} */}
 
-                
+                {(<li>
+                        <button onClick={() => {
+                            setMenuOpen(false)
+                            setPage("Novidades")
+                        }}>
+                            Atualizações
+                        </button>
+                    </li>
+                    )}
 
                     --- x ---
                     <li>

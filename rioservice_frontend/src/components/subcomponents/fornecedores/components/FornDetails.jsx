@@ -155,15 +155,15 @@ function FornDetails({hideDetails, setHideDetails, currentForn, user, host, setF
                         })
                     } else 
                     if(field.classList[1] === 'forn_nome_fantasia'){
-                        capitalizedField = 'Nome'
+                        capitalizedField = 'Nome fantasia'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${currentForn.forn_nome_fantasia}</span>`
                     } else
                     if(field.classList[1] === 'forn_insc_estadual'){
-                        capitalizedField = 'Nome'
+                        capitalizedField = 'Inscrição estadual'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${currentForn.forn_insc_estadual}</span>`
                     } else
                     if(field.classList[1] === 'forn_insc_municipal'){
-                        capitalizedField = 'Nome'
+                        capitalizedField = 'Inscrição municipal'
                         field.innerHTML = `${capitalizedField}: <span className="${field.classList[1]}_value">${currentForn.forn_insc_municipal}</span>`
                     }
                 } else {

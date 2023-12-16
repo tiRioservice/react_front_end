@@ -1,0 +1,42 @@
+@use '../../scss/reset';
+@import '../../scss/var';
+@import '../../scss/basicElements';
+
+section#versions{
+    padding: 16px;
+
+    .container{
+        border: 1px solid $color_one;
+        font-family: sans-serif;
+        padding: 16px;
+
+        .version{
+            margin: 8px 0;
+            border-radius: 4px;
+
+            .versionNumber{
+                padding: 8px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .versionDate{
+                padding: 8px;
+                font-size: 14px;
+                color: $color_one;
+            }
+
+            .major{
+                padding: 4px 8px;
+            }
+
+            .minor{
+                padding: 4px 8px;
+            }
+
+            .bugfix{
+                padding: 4px 8px;
+            }
+        }
+    }
+}

@@ -13,6 +13,7 @@ import Estoque from '../subcomponents/estoque/Estoque';
 import Categorias from '../subcomponents/categorias/Categorias';
 import Itens from '../subcomponents/itens/Itens';
 import Cotacoes from '../subcomponents/cotacoes/Cotacoes';
+import WhatsNew from '../whatsnew/WhatsNew';
 const options = {
     method: undefined,
     headers: undefined,
@@ -82,6 +83,8 @@ function Dashboard({user, logOut, host}){
                 return <Itens host={host} user={user} stockCategs={stockCategs} allBases={allBases}/>
             case "Cotacoes":
                 return <Cotacoes host={host} user={user}/>
+            case "Novidades":
+                return <WhatsNew/>
             default:
                 return "Default"
         }

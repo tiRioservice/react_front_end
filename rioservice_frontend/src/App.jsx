@@ -4,10 +4,11 @@ import './components/scss/base_import.scss'
 import apiFetchData from './ApiFetchData'
 import Dashboard from './components/dashboard/Dashboard'
 import authLogout from './components/login/components/AuthLogout'
+import version from './components/whatsnew/components/versions'
 
 function App() {
   const [hostWithPortString] = useState("localhost:8000") //IP do servidor = "18.228.46.50" || "localhost:8000"
-  const [appVersion] = useState("1.0.0")
+  const [appVersion, setAppVersion] = useState("0.0.0")
   const [data, setData] = useState({"data": false})
   const [user, setUser] = useState(undefined)
   const [loggedIn, setLoggedIn] = useState(false)
@@ -18,6 +19,7 @@ function App() {
 
   useEffect(() => {
     apiFetchData(setData, hostWithPortString)
+    setAppVersion(version[version.length - 1].version)
   }, [hostWithPortString])
 
   return (
